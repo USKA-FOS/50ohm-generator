@@ -188,12 +188,16 @@ class Build:
         section,
         section_id,
         chapter,
+        previous_section=None,
         next_section=None,
+        previous_chapter=None,
         next_chapter=None,
         chapter_number=None,
     ):
         section_template = self.env.get_template("html/section.html")
+        previous_section_template = self.env.get_template("html/previous_section.html")
         next_section_template = self.env.get_template("html/next_section.html")
+        previous_chapter_template = self.env.get_template("html/previous_chapter.html")
         next_chapter_template = self.env.get_template("html/next_chapter.html")
         with (self.config.p_build / f"{edition}_{section['ident']}.html").open("w") as file:
             # Use provided chapter_number or fall back to chapter dict
@@ -228,6 +232,16 @@ class Build:
                     chapter=chapter,
                 )
 
+                if previous_section is not None:
+                    result += previous_section_template.render(
+                        url=f"{edition}_{previous_section['ident']}.html",
+                        title=previous_section["title"],
+                    )
+                elif previous_chapter is not None:
+                    result += previous_chapter_template.render(
+                        url=f"{edition}_chapter_{previous_chapter['ident']}.html",
+                        title=previous_chapter["title"],
+                    )
                 if next_section is not None:
                     result += next_section_template.render(
                         url=f"{edition}_{next_section['ident']}.html",
@@ -368,6 +382,10 @@ class Build:
             for chapter_number, chapter in enumerate(progress.track(chapters, task_id=chapter_task), 1):
                 progress.update(chapter_task, description=f"Building edition {edition}: Chapter {chapter['title']}")
 
+                # Determine previous chapter for navigation (None if this is the first chapter). chapter_number
+                # starts at 1, chapters[i] is indexed starting from 0, so we subtract 2.
+                previous_chapter = chapters[chapter_number-2] if chapter_number > 1 else None
+
                 # Determine next chapter for navigation (None if this is the last chapter)
                 next_chapter = chapters[chapter_number] if chapter_number < len(chapters) else None
 
@@ -389,6 +407,10 @@ class Build:
                         section_content = sfile.read()
                         section["slide"] = section_content
 
+                    # See previous_chapter for logic on index arithmetic
+                    previous_section = (
+                        chapter["sections"][section_number-2] if section_number > 1 else None
+                    )
                     next_section = (
                         chapter["sections"][section_number] if section_number < len(chapter["sections"]) else None
                     )
@@ -398,7 +420,9 @@ class Build:
                         section,
                         section_number,
                         chapter,
+                        previous_section,
                         next_section,
+                        previous_chapter,
                         next_chapter,
                         chapter_number,
                     )
