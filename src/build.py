@@ -153,8 +153,9 @@ class Build:
         except FileNotFoundError:
             tqdm.write(f"\033[31mPhoto #{id} not found\033[0m")
 
-    def __build_chapter_index(self, edition, edition_name, number, chapter, next_chapter=None):
+    def __build_chapter_index(self, edition, edition_name, number, chapter, previous_chapter=None, next_chapter=None):
         chapter_template = self.env.get_template("html/chapter.html")
+        previous_chapter_template = self.env.get_template("html/previous_chapter.html")
         next_chapter_template = self.env.get_template("html/next_chapter.html")
         with (self.config.p_build / f"{edition}_chapter_{chapter['ident']}.html").open("w") as file:
             result = chapter_template.render(
@@ -164,6 +165,11 @@ class Build:
                 chapter=chapter,
             )
 
+            if previous_chapter is not None:
+                result += previous_chapter_template.render(
+                    url=f"{edition}_chapter_{previous_chapter['ident']}.html",
+                    title=previous_chapter["title"],
+                )
             if next_chapter is not None:
                 result += next_chapter_template.render(
                     url=f"{edition}_chapter_{next_chapter['ident']}.html",
@@ -389,7 +395,7 @@ class Build:
                 # Determine next chapter for navigation (None if this is the last chapter)
                 next_chapter = chapters[chapter_number] if chapter_number < len(chapters) else None
 
-                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, next_chapter)
+                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, previous_chapter, next_chapter)
 
                 # Open, parse and render each section.
                 section_task = progress.add_task(description="Rendering sections ...")
