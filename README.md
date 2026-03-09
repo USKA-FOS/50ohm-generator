@@ -1,6 +1,6 @@
 # 50ohm.de helvetisierte Version CH
 
-50ohm.de ist die Ausbildungsplattform des DARC e.V. 
+50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die Schweizerische Prüfung (Lizenz HB3 / HB9) angepasst und in die drei Landessprachen f/i übersetzt.
 
 Dieses Repository enthält den Generator für die Seite [50ohm.de](https://50ohm.de), der mit einem andern [Repository](https://github.com/DARC-e-V/50ohm-contents-dl/) als Quelle für die Inhalte arbeitet.
 
@@ -17,7 +17,7 @@ Prinzipiell lassen sich diese Generatoren auch für andere Quell-Repositories ve
 
 ## Mitmachen und Kontakt
 
-Aktuell wird 50ohm durch ein kleines ehrenamtliches Entwicklerteam beim DARC e.V. betreut und weiterentwickelt. Falls du einen Fehler oder einen Funktionswunsch hast, schreibe gerne ein Issue. Auch über einen PR freuen wir uns!
+Aktuell wird 50ohm durch ein kleines ehrenamtliches Entwicklerteam von der USKA betreut und weiterentwickelt. Falls du einen Fehler oder einen Funktionswunsch hast, schreibe gerne ein Issue. Auch über einen PR freuen wir uns!
 Wenn du inhaltliche Beiträge hast, kannst du diese über dieses [Repository](https://github.com/DARC-e-V/50ohm-contents-dl) einreichen. 
 
 Bei Anfragen bitte die Email-Adresse [50ohm@darc.de](mailto:50ohm@darc.de) nutzen. Weiterhin findet man viele der Beitragenden im Matrix-Kanal [50ohm Contribution](https://matrix.to/#/#50ohm-contribution:darc.de).
