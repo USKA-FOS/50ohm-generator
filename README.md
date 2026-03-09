@@ -1,4 +1,4 @@
-# 50ohm.de
+# 50ohm.de helvetisierte Version CH
 
 50ohm.de ist die Ausbildungsplattform des DARC e.V. 
 
