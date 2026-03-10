@@ -1,6 +1,6 @@
 # 50ohm.de helvetisierte Version CH
 
-50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die Schweizerische Prüfung (Lizenz HB3 / HB9) angepasst und in die drei Landessprachen f/i übersetzt.
+50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die Schweizerische Prüfung (Lizenz HB3 / HB9) angepasst und in die zwei weiteren Landessprachen f/i übersetzt.
 
 Dieses Repository enthält den Generator für die Seite [50ohm.de](https://50ohm.de), der mit einem andern [Repository](https://github.com/DARC-e-V/50ohm-contents-dl/) als Quelle für die Inhalte arbeitet.
 
