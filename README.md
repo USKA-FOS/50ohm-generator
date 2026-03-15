@@ -1,26 +1,26 @@
 # 50ohm.de helvetisierte Version CH
 
-50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die Schweizerische Prüfung (Lizenz HB3 / HB9) angepasst und in die zwei weiteren Landessprachen f/i übersetzt.
+50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die schweizerischen Gegebenheiten (Lizenz HB3 / HB9) angepasst und in die zwei weiteren Landessprachen (F/I) übersetzt.
 
-Dieses Repository enthält den Generator für die Seite [50ohm.de](https://50ohm.de), der mit einem andern [Repository](https://github.com/DARC-e-V/50ohm-contents-dl/) als Quelle für die Inhalte arbeitet.
+Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
 ## Überblick
 
-Die Ausbildungsmaterialien von 50ohm.de werden in einem erweiterten Markdownformat geschrieben, intern als DARCdown bezeichnet. Kern des Generators ist ein Parser, der auf [mistletoe](https://github.com/miyuchina/mistletoe) basiert und um zusätzliche Syntax und Ausgabeformate erweitert wurde.
+Die Ausbildungsmaterialien für die Plattform werden in einem erweiterten Markdownformat geschrieben, intern als DARCdown bezeichnet. Kern des Generators ist ein Parser, der auf [mistletoe](https://github.com/miyuchina/mistletoe) basiert und um zusätzliche Syntax und Ausgabeformate erweitert wurde.
 
 Die möglichen Ausgabeformate sind:
 - HTML: [`fifty_ohm_html_renderer.py`](renderer/fifty_ohm_html_renderer.py)
 - LaTeX: [`fifty_ohm_latex_renderer`](renderer/fifty_ohm_latex_renderer.py)
 - HTML für Slides mit reveal.js: [`fifty_ohm_html_slide_renderer.py`](renderer/fifty_ohm_html_slide_renderer.py)
 
-Prinzipiell lassen sich diese Generatoren auch für andere Quell-Repositories verwenden. Dies ist insbesondere für andere IARU-Verbände interessant, welche auch 50ohm als Ausbildungsseite implementieren wollen. Der eigentliche Teil des Generators liegt in `src`, insbesondere das Skript ([`build.py`](src/build.py)). In dieser Datei finden sich außerdem weitere Begleitfunktionen zum Renderprozess, z.B. das Übersetzen von Fragennummern in Fragen oder das Kopieren von Assets.
+Prinzipiell lassen sich diese Generatoren auch für andere Quell-Repositories verwenden (so wie es hier für die helvetisierte Version der 50ohm-Plattform der Fall ist). Dies ist insbesondere für andere IARU-Verbände interessant, welche auch 50ohm als Ausbildungsseite implementieren wollen. Der eigentliche Teil des Generators liegt in `src`, insbesondere das Skript ([`build.py`](src/build.py)). In dieser Datei finden sich außerdem weitere Begleitfunktionen zum Renderprozess, z.B. das Übersetzen von Fragennummern in Fragen oder das Kopieren von Assets.
 
 ## Mitmachen und Kontakt
 
-Aktuell wird 50ohm durch ein kleines ehrenamtliches Entwicklerteam von der USKA betreut und weiterentwickelt. Falls du einen Fehler oder einen Funktionswunsch hast, schreibe gerne ein Issue. Auch über einen PR freuen wir uns!
-Wenn du inhaltliche Beiträge hast, kannst du diese über dieses [Repository](https://github.com/DARC-e-V/50ohm-contents-dl) einreichen. 
+Aktuell wird [50ohm.de](https://www.50ohm.de) durch ein kleines ehrenamtliches Entwicklerteam beim DARC e.V. betreut und weiterentwickelt. Die helvetisierte Version wird von einem ebenso kleinen Team im Rahmen eines Projektes der [USKA](https://www.uska.ch) bewirtschaftet. Falls du einen Fehler oder einen Funktionswunsch hast, schreibe gerne ein Issue. Auch über einen PR freuen wir uns!
+Wenn du inhaltliche Beiträge hast und diese direkt in der Originalversion des DARC einbringen möchtest, kannst du diese über dieses [Repository](https://github.com/DARC-e-V/50ohm-contents-dl) einreichen.
 
-Bei Anfragen bitte die Email-Adresse [50ohm@darc.de](mailto:50ohm@darc.de) nutzen. Weiterhin findet man viele der Beitragenden im Matrix-Kanal [50ohm Contribution](https://matrix.to/#/#50ohm-contribution:darc.de).
+Bei Anfragen zur Helvetisierung bitte die Email-Adresse [50ohm@uska.ch](mailto:50ohm@uska.ch), bei solche ans DARC-Team [50ohm@darc.de](mailto:50ohm@darc.de) nutzen. Weiterhin findet man viele der Beitragenden im Matrix-Kanal [50ohm Contribution](https://matrix.to/#/#50ohm-contribution:darc.de).
 
 ### Python einrichten und Abhängigkeiten installieren
 
