@@ -67,6 +67,13 @@ class Build:
             if number in metadata_json:
                 metadata = metadata_json[number]
 
+            # FIXME: Remove after beta
+            if number in self.questions_upstream:
+                question_upstream = self.questions_upstream.get(number, None)
+            else:
+                question_upstream = question.copy()
+                question_upstream['question'] = None  # This is how we encode new questions
+
             if question is None or metadata is None:
                 tqdm.write(
                     f"\033[31mQuestion #{number} is missing"
@@ -80,8 +87,10 @@ class Build:
 
             if "answer_a" in question:
                 answers = [question["answer_a"], question["answer_b"], question["answer_c"], question["answer_d"]]
+                answers_upstream = [question_upstream["answer_a"], question_upstream["answer_b"], question_upstream["answer_c"], question_upstream["answer_d"]]
             else:
                 answers = []
+                answers_upstream = []
 
             if metadata["picture_a"] != "":
                 alt_text_a = self.__picture_handler(metadata["picture_a"])
@@ -118,10 +127,12 @@ class Build:
 
             return question_template.render(
                 question=question["question"],
+                question_upstream=question_upstream["question"],
                 number=number,
                 layout=metadata["layout"],
                 picture_question=picture_question,
                 answers=answers,
+                answers_upstream=answers_upstream,
                 answer_pictures=answer_pictures,
                 alt_text_answers=alt_text_answers,
                 alt_text_question=alt_text_question,
