@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-between mt-4 navigation">
+    <div>                              
+        {%if previous_url is not none %}<a class="btn btn-outline-primary" href="{{previous_url}}">←</a>{%endif%}
+    </div>
+
+    <div>
+        {%if next_url is not none %}<a class="btn btn-outline-primary" href="{{next_url}}">→</a>{%endif%}
+    </div>
+</div>

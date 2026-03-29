@@ -153,22 +153,29 @@ class Build:
         except FileNotFoundError:
             tqdm.write(f"\033[31mPhoto #{id} not found\033[0m")
 
-    def __build_chapter_index(self, edition, edition_name, number, chapter, next_chapter=None):
+    def __build_chapter_index(self, edition, edition_name, number, chapter, previous_chapter=None):
         chapter_template = self.env.get_template("html/chapter.html")
-        next_chapter_template = self.env.get_template("html/next_chapter.html")
+
+        # Find last section of previous chapter
+        if previous_chapter is not None:
+            previous_section_ident = previous_chapter["sections"][-1]["ident"]
+            previous_url = f"{edition}_{previous_section_ident}.html"
+        else:
+            previous_url = None
+
+        # First section in this chapter
+        next_section_ident = chapter["sections"][0]["ident"]
+        next_url = f"{edition}_{next_section_ident}.html"
+
         with (self.config.p_build / f"{edition}_chapter_{chapter['ident']}.html").open("w") as file:
             result = chapter_template.render(
                 edition=edition,
                 name=edition_name,
                 number=number,
                 chapter=chapter,
+                previous_url=previous_url,
+                next_url=next_url,
             )
-
-            if next_chapter is not None:
-                result += next_chapter_template.render(
-                    url=f"{edition}_chapter_{next_chapter['ident']}.html",
-                    title=next_chapter["title"],
-                )
 
             result = self.__build_page(result, course_wrapper=True)
             file.write(result)
@@ -188,13 +195,12 @@ class Build:
         section,
         section_id,
         chapter,
+        previous_section=None,
         next_section=None,
         next_chapter=None,
         chapter_number=None,
     ):
         section_template = self.env.get_template("html/section.html")
-        next_section_template = self.env.get_template("html/next_section.html")
-        next_chapter_template = self.env.get_template("html/next_chapter.html")
         with (self.config.p_build / f"{edition}_{section['ident']}.html").open("w") as file:
             # Use provided chapter_number or fall back to chapter dict
             chapter_num = str(chapter_number) if chapter_number is not None else chapter.get("number", "0")
@@ -220,24 +226,27 @@ class Build:
                 # Second pass: render with hierarchical numbers
                 section["content"] = renderer.render(doc)
 
+                if previous_section is not None:
+                    previous_url=f"{edition}_{previous_section['ident']}.html"
+                else:
+                    previous_url=f"{edition}_chapter_{chapter['ident']}.html"
+
+                if next_section is not None:
+                    next_url=f"{edition}_{next_section['ident']}.html"
+                elif next_chapter is not None:
+                    next_url=f"{edition}_chapter_{next_chapter['ident']}.html"
+                else:
+                    next_url=None
+
                 result = section_template.render(
                     edition=edition,
                     name=edition_name,
                     section=section,
                     section_id=section_id,
                     chapter=chapter,
+                    previous_url=previous_url,
+                    next_url=next_url,
                 )
-
-                if next_section is not None:
-                    result += next_section_template.render(
-                        url=f"{edition}_{next_section['ident']}.html",
-                        title=next_section["title"],
-                    )
-                elif next_chapter is not None:
-                    result += next_chapter_template.render(
-                        url=f"{edition}_chapter_{next_chapter['ident']}.html",
-                        title=next_chapter["title"],
-                    )
 
                 result = self.__build_page(result, course_wrapper=True)
                 file.write(result)
@@ -368,10 +377,14 @@ class Build:
             for chapter_number, chapter in enumerate(progress.track(chapters, task_id=chapter_task), 1):
                 progress.update(chapter_task, description=f"Building edition {edition}: Chapter {chapter['title']}")
 
+                # Determine previous chapter for navigation (None if this is the first chapter). chapter_number
+                # starts at 1, chapters[i] is indexed starting from 0, so we subtract 2.
+                previous_chapter = chapters[chapter_number-2] if chapter_number > 1 else None
+
                 # Determine next chapter for navigation (None if this is the last chapter)
                 next_chapter = chapters[chapter_number] if chapter_number < len(chapters) else None
 
-                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, next_chapter)
+                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, previous_chapter)
 
                 # Open, parse and render each section.
                 section_task = progress.add_task(description="Rendering sections ...")
@@ -389,6 +402,10 @@ class Build:
                         section_content = sfile.read()
                         section["slide"] = section_content
 
+                    # See previous_chapter for logic on index arithmetic
+                    previous_section = (
+                        chapter["sections"][section_number-2] if section_number > 1 else None
+                    )
                     next_section = (
                         chapter["sections"][section_number] if section_number < len(chapter["sections"]) else None
                     )
@@ -398,6 +415,7 @@ class Build:
                         section,
                         section_number,
                         chapter,
+                        previous_section,
                         next_section,
                         next_chapter,
                         chapter_number,
