@@ -23,10 +23,17 @@ class Build:
 
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
-        self.questions = self.__parse_katalog()
+        self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
-    def __parse_katalog(self):
-        with self.config.p_data_fragenkatalog.open() as file:
+        # FIXME:Revert after beta
+        if self.config.p_data_fragenkatalog_upstream is not None:
+            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog_upstream)
+        else:
+            # Loading the regular pool as upstream pool will create empty diffs
+            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog)
+
+    def __parse_katalog(self, path: Path):
+        with path.open() as file:
             fragenkatalog = json.load(file)
 
             questions = {}
