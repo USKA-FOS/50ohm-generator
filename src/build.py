@@ -15,6 +15,7 @@ from renderer.fifty_ohm_html_renderer import FiftyOhmHtmlRenderer
 from renderer.fifty_ohm_html_slide_renderer import FiftyOhmHtmlSlideRenderer
 
 from .config import Config
+from hb_beta import diff_filter
 
 
 class Build:
@@ -23,10 +24,18 @@ class Build:
 
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
-        self.questions = self.__parse_katalog()
+        self.env.filters["diff"] = diff_filter # FIXME: remove after beta
+        self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
-    def __parse_katalog(self):
-        with self.config.p_data_fragenkatalog.open() as file:
+        # FIXME:Revert after beta
+        if self.config.p_data_fragenkatalog_upstream is not None:
+            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog_upstream)
+        else:
+            # Loading the regular pool as upstream pool will create empty diffs
+            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog)
+
+    def __parse_katalog(self, path: Path):
+        with path.open() as file:
             fragenkatalog = json.load(file)
 
             questions = {}
@@ -60,6 +69,13 @@ class Build:
             if number in metadata_json:
                 metadata = metadata_json[number]
 
+            # FIXME: Remove after beta
+            if number in self.questions_upstream:
+                question_upstream = self.questions_upstream.get(number, None)
+            else:
+                question_upstream = question.copy()
+                question_upstream['question'] = None  # This is how we encode new questions
+
             if question is None or metadata is None:
                 tqdm.write(
                     f"\033[31mQuestion #{number} is missing"
@@ -68,13 +84,14 @@ class Build:
                     + "\033[0m"
                 )
                 metadata = {"layout": "not-found", "picture_a": ""}
-                number = 404
                 question = {"question": f"Frage {input} nicht gefunden"}
 
             if "answer_a" in question:
                 answers = [question["answer_a"], question["answer_b"], question["answer_c"], question["answer_d"]]
+                answers_upstream = [question_upstream["answer_a"], question_upstream["answer_b"], question_upstream["answer_c"], question_upstream["answer_d"]]
             else:
                 answers = []
+                answers_upstream = []
 
             if metadata["picture_a"] != "":
                 alt_text_a = self.__picture_handler(metadata["picture_a"])
@@ -111,10 +128,12 @@ class Build:
 
             return question_template.render(
                 question=question["question"],
+                question_upstream=question_upstream["question"],
                 number=number,
                 layout=metadata["layout"],
                 picture_question=picture_question,
                 answers=answers,
+                answers_upstream=answers_upstream,
                 answer_pictures=answer_pictures,
                 alt_text_answers=alt_text_answers,
                 alt_text_question=alt_text_question,

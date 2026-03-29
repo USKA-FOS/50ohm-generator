@@ -1,6 +1,10 @@
 <div class="question layout-{{ layout }}" id="{{ number }}">
   <div class="question-text">
-    {{ number }}: {{ question }}
+    {% if question_upstream is not none %}
+    {{ number }}: {{ question | diff(question_upstream) }}
+    {% else %}
+    <span class="diff added">{{ number }}</span>: {{ question }}
+    {% endif %}
   </div>
   {% if picture_question %}
     <div class="question-picture"><img src="pictures/{{ picture_question }}.svg" alt="{{ alt_text_question }}"></div>
@@ -9,7 +13,7 @@
     {% for i in range(4) %}
       <button onclick="answer(this, {{ 'true' if i == 0 else 'false' }} );">
         {% if answers[i] %}
-          {{ answers[i] }}
+          {{ answers[i] | diff(answers_upstream[i]) }}
         {% endif %}
         {% if answer_pictures[i] %}
           <div class="question-picture"><img src="pictures/{{ answer_pictures[i] }}.svg" alt="{{ alt_text_answers[i] }}"></div>
@@ -34,4 +38,3 @@
   {% endif %}
 </div>
 
-  
