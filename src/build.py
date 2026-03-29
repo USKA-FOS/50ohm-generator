@@ -84,7 +84,6 @@ class Build:
                     + "\033[0m"
                 )
                 metadata = {"layout": "not-found", "picture_a": ""}
-                number = 404
                 question = {"question": f"Frage {input} nicht gefunden"}
 
             if "answer_a" in question:
