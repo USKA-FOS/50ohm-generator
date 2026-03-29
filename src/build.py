@@ -15,6 +15,7 @@ from renderer.fifty_ohm_html_renderer import FiftyOhmHtmlRenderer
 from renderer.fifty_ohm_html_slide_renderer import FiftyOhmHtmlSlideRenderer
 
 from .config import Config
+from hb_beta import diff_filter
 
 
 class Build:
@@ -23,6 +24,7 @@ class Build:
 
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
+        self.env.filters["diff"] = diff_filter # FIXME: remove after beta
         self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
