@@ -268,7 +268,7 @@ class Build:
                 section_url=slide_filename,
             ) as renderer:
                 result = "<section>\n"
-                result += f'<section data-background="#DAEEFA">\n<h1>{chapter["title"]}</h1>\n</section>\n'
+                result += f'<section data-background="#f3dad8">\n<h1>{chapter["title"]}</h1>\n</section>\n'
                 result += help_template.render()
                 result += "</section>\n"
 
@@ -295,7 +295,7 @@ class Build:
                     renderer.collect_figures(doc)
 
                     # Second pass: render with hierarchical numbers
-                    tmp = f'<section data-background="#DAEEFA">\n<h1>{section["title"]}</h1>\n</section>\n'
+                    tmp = f'<section data-background="#f3dad8">\n<h1>{section["title"]}</h1>\n</section>\n'
                     tmp += renderer.render(doc)
                     result += f"<section>{tmp}</section>\n"
 
