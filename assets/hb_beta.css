@@ -1,0 +1,20 @@
+.diff {
+  word-wrap: break-word;
+  padding: 0.1em 0.2em;
+  border-radius: 3px;
+}
+ 
+ 
+/* Added text (green) */
+.diff.added {
+  background-color: #dafbe1;   /* GitHub light green */
+  color: #1a7f37;
+}
+ 
+/* Removed text (red) */
+.diff.removed {
+  background-color: #ffebe9;   /* GitHub light red */
+  color: #cf222e;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
