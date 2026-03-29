@@ -45,9 +45,9 @@ section.has-dark-background h6 {
     --r-heading3-size: 1.2em;
     --r-heading4-size: 1em;
     --r-code-font: monospace;
-    --r-link-color: #2aa6da;
-    --r-link-color-dark: #2aa6da;
-    --r-link-color-hover: #2aa6da;
+    --r-link-color: #ac2d24;
+    --r-link-color-dark: #ac2d24;
+    --r-link-color-hover: #ac2d24;
     --r-selection-background-color: rgba(0, 0, 0, 0.99);
     --r-selection-color: #fff;
     --r-overlay-element-bg-color: 0, 0, 0;
@@ -160,7 +160,7 @@ section.has-dark-background h6 {
 .reveal em {
     font-style: normal;
     font-weight: 600;
-    color: #2AA6DA;
+    color: #ac2d24;
 }
 
 .reveal ol,
@@ -196,7 +196,7 @@ section.has-dark-background h6 {
 }
 
 .reveal ul li::marker {
-  color: #2aa6da;
+  color: #ac2d24;
 }
 
 .reveal dt {
@@ -454,7 +454,7 @@ body:after {
 
 /* questions will be shown in landscape and need special treatment */
 .question {
-    background: #2aa6da;
+    background: #ac2d24;
     color: #fff;
 }
 
@@ -537,7 +537,7 @@ ul.list {
 
 ul.list li::before {
     content: "▪";
-    color: #2aa6da;
+    color: #ac2d24;
     display: inline-block;
     width: 1em;
     margin-left: -1em;
