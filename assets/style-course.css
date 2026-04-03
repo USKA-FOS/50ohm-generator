@@ -447,3 +447,21 @@ span.formula {
 .course .katex-display {
   margin: 1em 0em;
 }
+
+/* Render bold katex in question heads */
+div.question-text {
+  .katex {
+    font-weight: 600;
+  }
+}
+
+/* katex default is 1.21em serif font. Reduce and enforce sans outside of math blocks */
+p, div.question, ul {
+  .katex {
+    font-family: Inter, sans-serif !important;
+    font-size: 1.0rem;
+  }
+  .katex .mathnormal {
+    font-family: Inter, sans-serif !important;
+  }
+}
