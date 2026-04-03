@@ -159,28 +159,36 @@ class Build:
         except FileNotFoundError:
             tqdm.write(f"\033[31mPhoto #{id} not found\033[0m")
 
-    def __build_chapter_index(self, edition, edition_name, number, chapter, previous_chapter=None):
+    def __build_chapter_index(self, edition, edition_name, number, chapter, previous_chapter, next_chapter):
         chapter_template = self.env.get_template("html/chapter.html")
 
-        # Find last section of previous chapter
+        # Find previous chapter and last section thereof
         if previous_chapter is not None:
-            previous_section_ident = previous_chapter["sections"][-1]["ident"]
-            previous_url = f"{edition}_{previous_section_ident}.html"
+            previous_chapter_url = self.__ident_to_chapter_url(edition, previous_chapter["ident"])
+            previous_section_url = self.__ident_to_section_url(edition, previous_chapter["sections"][-1]["ident"])
         else:
-            previous_url = None
+            previous_chapter_url = None
+            previous_section_url = None
 
         # First section in this chapter
-        next_section_ident = chapter["sections"][0]["ident"]
-        next_url = f"{edition}_{next_section_ident}.html"
+        next_section_url = self.__ident_to_section_url(edition, chapter["sections"][0]["ident"])
 
-        with (self.config.p_build / f"{edition}_chapter_{chapter['ident']}.html").open("w") as file:
+        # Find next chapter if it exists
+        if next_chapter is not None:
+            next_chapter_url = self.__ident_to_chapter_url(edition, next_chapter["ident"])
+        else:
+            next_chapter_url = None
+
+        with (self.config.p_build / self.__ident_to_chapter_url(edition, chapter['ident'])).open("w") as file:
             result = chapter_template.render(
                 edition=edition,
                 name=edition_name,
                 number=number,
                 chapter=chapter,
-                previous_url=previous_url,
-                next_url=next_url,
+                previous_chapter_url=previous_chapter_url,
+                next_chapter_url=next_chapter_url,
+                previous_section_url=previous_section_url,
+                next_section_url=next_section_url,
             )
 
             result = self.__build_page(result, course_wrapper=True)
@@ -201,19 +209,23 @@ class Build:
         section,
         section_id,
         chapter,
-        previous_section=None,
-        next_section=None,
-        next_chapter=None,
+        previous_chapter,
+        next_chapter,
         chapter_number=None,
     ):
         section_template = self.env.get_template("html/section.html")
+
+        # See previous_chapter for logic on index arithmetic
+        previous_section = chapter["sections"][section_id-2] if section_id > 1 else None
+        next_section = chapter["sections"][section_id] if section_id < len(chapter["sections"]) else None
+
         with (self.config.p_build / f"{edition}_{section['ident']}.html").open("w") as file:
             # Use provided chapter_number or fall back to chapter dict
             chapter_num = str(chapter_number) if chapter_number is not None else chapter.get("number", "0")
             section_num = str(section_id)
 
             # Set the section URL for references
-            section_filename = f"{edition}_{section['ident']}.html"
+            section_filename = self.__ident_to_section_url(edition, section['ident'])
 
             with FiftyOhmHtmlRenderer(
                 question_renderer=self.__build_question,
@@ -232,17 +244,25 @@ class Build:
                 # Second pass: render with hierarchical numbers
                 section["content"] = renderer.render(doc)
 
-                if previous_section is not None:
-                    previous_url=f"{edition}_{previous_section['ident']}.html"
+                if previous_chapter is not None:
+                    previous_chapter_url = self.__ident_to_chapter_url(edition, previous_chapter["ident"])
                 else:
-                    previous_url=f"{edition}_chapter_{chapter['ident']}.html"
+                    previous_chapter_url = None
+
+                if next_chapter is not None:
+                    next_chapter_url = self.__ident_to_chapter_url(edition, next_chapter["ident"])
+                else:
+                    next_chapter_url = None
+
+                if previous_section is not None:
+                    previous_section_url = self.__ident_to_section_url(edition, previous_section['ident'])
+                else:
+                    previous_section_url = None
 
                 if next_section is not None:
-                    next_url=f"{edition}_{next_section['ident']}.html"
-                elif next_chapter is not None:
-                    next_url=f"{edition}_chapter_{next_chapter['ident']}.html"
+                    next_section_url = self.__ident_to_section_url(edition, next_section['ident'])
                 else:
-                    next_url=None
+                    next_section_url = None
 
                 result = section_template.render(
                     edition=edition,
@@ -250,8 +270,10 @@ class Build:
                     section=section,
                     section_id=section_id,
                     chapter=chapter,
-                    previous_url=previous_url,
-                    next_url=next_url,
+                    previous_chapter_url=previous_chapter_url,
+                    next_chapter_url=next_chapter_url,
+                    previous_section_url=previous_section_url,
+                    next_section_url=next_section_url,
                 )
 
                 result = self.__build_page(result, course_wrapper=True)
@@ -390,7 +412,7 @@ class Build:
                 # Determine next chapter for navigation (None if this is the last chapter)
                 next_chapter = chapters[chapter_number] if chapter_number < len(chapters) else None
 
-                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, previous_chapter)
+                self.__build_chapter_index(edition, edition_name, chapter_number, chapter, previous_chapter, next_chapter)
 
                 # Open, parse and render each section.
                 section_task = progress.add_task(description="Rendering sections ...")
@@ -408,21 +430,13 @@ class Build:
                         section_content = sfile.read()
                         section["slide"] = section_content
 
-                    # See previous_chapter for logic on index arithmetic
-                    previous_section = (
-                        chapter["sections"][section_number-2] if section_number > 1 else None
-                    )
-                    next_section = (
-                        chapter["sections"][section_number] if section_number < len(chapter["sections"]) else None
-                    )
                     self.__build_section(
                         edition,
                         edition_name,
                         section,
                         section_number,
                         chapter,
-                        previous_section,
-                        next_section,
+                        previous_chapter,
                         next_chapter,
                         chapter_number,
                     )
