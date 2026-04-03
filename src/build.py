@@ -24,7 +24,7 @@ class Build:
 
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
-        self.env.filters["diff"] = diff_filter # FIXME: remove after beta
+        self.env.filters["diff"] = diff_filter  # FIXME: remove after beta
         self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
@@ -36,7 +36,8 @@ class Build:
 
     def __parse_katalog(self, path: Path):
         with path.open() as file:
-            fragenkatalog = json.load(file)
+#           fragenkatalog = json.load(file)  # FIXME::revert after beta
+            fragenkatalog = json.loads(''.join(file.readlines()).replace('\\u00df', 'ss'))
 
             questions = {}
 
@@ -61,20 +62,21 @@ class Build:
             metadata_json = json.load(file)
 
             question = None
+            question_upstream = None
             metadata = None
 
             if number in self.questions:
                 question = self.questions[number]
+                # FIXME: Remove after beta
+                if number in self.questions_upstream:
+                    question_upstream = self.questions_upstream[number]
+                else:
+                    question_upstream = question.copy()
+                    question_upstream['question'] = None  # This is how we encode new questions
+
 
             if number in metadata_json:
                 metadata = metadata_json[number]
-
-            # FIXME: Remove after beta
-            if number in self.questions_upstream:
-                question_upstream = self.questions_upstream.get(number, None)
-            else:
-                question_upstream = question.copy()
-                question_upstream['question'] = None  # This is how we encode new questions
 
             if question is None or metadata is None:
                 tqdm.write(
@@ -85,6 +87,9 @@ class Build:
                 )
                 metadata = {"layout": "not-found", "picture_a": ""}
                 question = {"question": f"Frage {input} nicht gefunden"}
+
+            if question_upstream is None:
+                question_upstream = {"question": f"Frage {input} nicht gefunden"}
 
             if "answer_a" in question:
                 answers = [question["answer_a"], question["answer_b"], question["answer_c"], question["answer_d"]]
