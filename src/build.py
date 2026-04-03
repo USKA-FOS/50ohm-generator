@@ -24,7 +24,7 @@ class Build:
 
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
-        self.env.filters["diff"] = diff_filter # FIXME: remove after beta
+        self.env.filters["diff"] = diff_filter  # FIXME: remove after beta
         self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
@@ -36,7 +36,8 @@ class Build:
 
     def __parse_katalog(self, path: Path):
         with path.open() as file:
-            fragenkatalog = json.load(file)
+#           fragenkatalog = json.load(file)  # FIXME::revert after beta
+            fragenkatalog = json.loads(''.join(file.readlines()).replace('\\u00df', 'ss'))
 
             questions = {}
 
