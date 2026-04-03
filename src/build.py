@@ -41,6 +41,12 @@ class Build:
 
             return questions
 
+    def __ident_to_chapter_url(self, edition, ident):
+        return f"{edition}_chapter_{ident}.html"
+
+    def __ident_to_section_url(self, edition, ident):
+        return f"{edition}_{ident}.html"
+
     def __build_question(self, number, template_file="html/question.html"):
         """Combines the original question dataset from BNetzA with our internal metadata"""
 
