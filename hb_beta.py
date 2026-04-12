@@ -9,23 +9,26 @@ def diff_filter(new: str, old: str):
     new_words = new.split()
 
     matcher = difflib.SequenceMatcher(None, old_words, new_words)
+    ret = []
 
     for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         if tag == 'equal':
-            ret += ' '.join(old_words[i1:i2])
+            ret.extend(old_words[i1:i2])
         elif tag == 'delete':
-            ret += f'<span class="diff removed">{" ".join(old_words[i1:i2])}</span>'
+            deleted = ' '.join(old_words[i1:i2])
+            ret.append(f'<span class="diff removed">{deleted}</span>')
         elif tag == 'insert':
-            ret += f'<span class="diff added">{" ".join(new_words[j1:j2])}</span>'
+            inserted = ' '.join(new_words[j1:j2])
+            ret.append(f'<span class="diff added">{inserted}</span>')
         elif tag == 'replace':
             deleted = ' '.join(old_words[i1:i2])
             inserted = ' '.join(new_words[j1:j2])
             # Shortcut to deal with added or removed puncutuation.
             if deleted + '.' == inserted:
-                ret += deleted + '<span class="diff added">.</span>'
+                ret.append(deleted + '<span class="diff added">.</span>')
             elif deleted == inserted + '.':
-                ret += inserted + '<span class="diff removed">.</span>'
+                ret.append(inserted + '<span class="diff removed">.</span>')
             else:
-                ret += f'<span class="diff removed">{deleted}</span>'
-                ret += f'<span class="diff added">{inserted}</span>'
-    return ret
+                ret.append(f'<span class="diff removed">{deleted}</span>' +
+                           f'<span class="diff added">{inserted}</span>')
+    return ' '.join(ret)
