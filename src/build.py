@@ -338,7 +338,8 @@ class Build:
                 previous_chapter_url=self.navigation.previous_chapter_url(chapter),
                 next_chapter_url=self.navigation.next_chapter_url(chapter),
                 previous_section_url=self.navigation.section_preceding_chapter_url(chapter),
-                next_section_url=self.navigation.section_first_of_chapter_url(chapter)
+                next_section_url=self.navigation.section_first_of_chapter_url(chapter),
+                disabled_label=self.disabled_label
             )
 
             result = self.__build_page(result, course_wrapper=True)
@@ -488,6 +489,7 @@ class Build:
         with (self.config.p_build / f"{book['edition']}_course_index.html").open("w") as file:
             result = template.render(
                 book=book,
+                disabled_label=self.disabled_label,
             )
             result = self.__build_page(result)
             file.write(result)
