@@ -456,12 +456,15 @@ div.question-text {
 }
 
 /* katex default is 1.21em serif font. Reduce and enforce sans outside of math blocks */
-p, div.question, ul {
+p, div.question, ul, ol {
   .katex {
-    font-family: Inter, sans-serif !important;
+    font-family: sans-serif;
     font-size: 1.0rem;
   }
   .katex .mathnormal {
-    font-family: Inter, sans-serif !important;
+    font-family: sans-serif;
+  }
+  .katex .accent-body {
+    font-family: Katex_Main;
   }
 }
