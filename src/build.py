@@ -132,6 +132,21 @@ class Build:
 
             return questions
 
+    def __annotate_book(self, book: dict, title: str, edition: str) -> None:
+        """Annotate the data struture obtained from the JSON ToC by adding title and edition and
+        checking if sections are part of the given edition. If they are not, insert a 'disabled'
+        key that can be used to gray out these sections when rendering."""
+        book['title'] = title
+        book['edition'] = edition
+        for chapter in book["chapters"]:
+            chapter["disabled"] = True
+            for section in chapter["sections"]:
+                if section["class"] in edition:
+                    section["disabled"] = False
+                    chapter["disabled"] = False
+                else:
+                    section["disabled"] = True
+
     def __build_question(self, number, template_file="html/question.html"):
         """Combines the original question dataset from BNetzA with our internal metadata"""
 
