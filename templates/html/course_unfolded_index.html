@@ -1,0 +1,16 @@
+<h1>{{ book["title"] }}</h1>
+<div class="chapter-toc d-grid gap-2">
+    {% for chapter in book["chapters"] %}
+        <a class="btn btn-outline-primary btn-labeled {%if chapter.disabled %}disabled{% endif %}" href="{{ book["edition"] }}_chapter_{{ chapter["ident"] }}.html">
+            <span class="btn-label">{{loop.index}}</span>{{ chapter["title"]}}{% if chapter.disabled %} ({{disabled_tag}}){% endif %}
+        </a>
+        {% if not chapter.disabled %}
+        {% set parent = loop %}
+        {% for section in chapter["sections"] %}
+        <a style="margin-left: 70px;" class="btn btn-outline-primary btn-labeled {%if section.disabled %}disabled{% endif %}" href="{{ edition }}_{{ section["ident"] }}.html">
+        <span class="btn-label">{{ parent.index }}.{{loop.index}}</span>{{ section["title"]}}{% if section.disabled %} ({{disabled_tag}}){% endif %}
+        </a>
+        {% endfor %}
+        {% endif %}
+    {% endfor %}
+</div>
