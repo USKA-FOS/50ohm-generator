@@ -2,7 +2,7 @@
 
 50ohm.de ist die Ausbildungsplattform des DARC e.V., diese wird ab dem Frühjahr 2026 an die schweizerischen Gegebenheiten (Lizenz HB3 / HB9) angepasst und in die zwei weiteren Landessprachen (F/I) übersetzt. Hierfür sind auch Änderungen an diesem Generator notwendig. Bisher wurde implementiert:
 
-- Anpassungen an Logos, Favicons und Farbpalette (siehe Issues #2 und #3)
+- Anpassungen an Logos, Favicons, Schriften und Farbpalette (siehe Issues #2, #3, #15, #16)
 - Konsistente Vorwärts/Zurück-Navigation  (siehe Issue #5)
 - Diff-Modus für modifizierte Fragen (siehe Issue #12)
 
