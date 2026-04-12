@@ -386,7 +386,7 @@ section.has-dark-background h6 {
 
 /* Scalable Logo on bottom left */
 body:after {
-    background-image: url(images/50ohm_rus.svg);
+    background-image: url(images/50ohm_ch.svg);
     background-size: 8.5em 5em;
     position: fixed;
     bottom: 1em;
