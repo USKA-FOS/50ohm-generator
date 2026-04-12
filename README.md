@@ -6,6 +6,7 @@
 - Konsistente Vorwärts/Zurück-Navigation  (siehe Issue #5)
 - Diff-Modus für modifizierte Fragen (siehe Issue #12)
 - Inhaltsverzeichnisse mit gleicher Nummerierung für alle Editionen (siehe Issue #8).
+- Direktes Rendering von Directus-Einheitungen (siehe Issue #14)
 
 Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
