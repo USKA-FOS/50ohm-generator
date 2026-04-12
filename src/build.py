@@ -13,10 +13,10 @@ from tqdm import tqdm
 
 from renderer.fifty_ohm_html_renderer import FiftyOhmHtmlRenderer
 from renderer.fifty_ohm_html_slide_renderer import FiftyOhmHtmlSlideRenderer
-from renderer.fifty_ohm_html_question_renderer import FiftyOhmHtmlQuestionRenderer
 
 from .config import Config
 from hb_beta import diff_filter
+from convert_latex import convert_latex
 
 
 class Build:
@@ -132,33 +132,32 @@ class Build:
 
             solution_file = self.config.p_data_solutions / f"{number}.md"
 
-            with FiftyOhmHtmlQuestionRenderer() as renderer:
-                question_parsed = renderer.render(Document(question["question"]))
-                question_upstream_parsed = renderer.render(Document(question_upstream["question"]))
+            question_parsed = convert_latex(question["question"])
+            question_upstream_parsed = convert_latex(question_upstream["question"])
 
-                if answers and answers[0] is not None:
-                    answers_parsed = [renderer.render(Document(a)) for a in answers]
-                else:
-                    answers_parsed = answers
+            if answers and answers[0] is not None:
+                answers_parsed = [convert_latex(a) for a in answers]
+            else:
+                answers_parsed = answers
 
-                if answers_upstream and answers_upstream[0] is not None:
-                    answers_upstream_parsed = [renderer.render(Document(a)) for a in answers_upstream]
-                else:
-                    answers_upstream_parsed = answers_upstream
+            if answers_upstream and answers_upstream[0] is not None:
+                answers_upstream_parsed = [convert_latex(a) for a in answers_upstream]
+            else:
+                answers_upstream_parsed = answers_upstream
 
-                return question_template.render(
-                    question=question_parsed,
-                    question_upstream=question_upstream_parsed,
-                    number=number,
-                    layout=metadata["layout"],
-                    picture_question=picture_question,
-                    answers=answers_parsed,
-                    answers_upstream=answers_upstream_parsed,
-                    answer_pictures=answer_pictures,
-                    alt_text_answers=alt_text_answers,
-                    alt_text_question=alt_text_question,
-                    has_solution=solution_file.exists(),
-                )
+            return question_template.render(
+                question=question_parsed,
+                question_upstream=question_upstream_parsed,
+                number=number,
+                layout=metadata["layout"],
+                picture_question=picture_question,
+                answers=answers_parsed,
+                answers_upstream=answers_upstream_parsed,
+                answer_pictures=answer_pictures,
+                alt_text_answers=alt_text_answers,
+                alt_text_question=alt_text_question,
+                has_solution=solution_file.exists(),
+            )
 
     def __build_question_slide(self, input):
         return self.__build_question(input, template_file="slide/question.html")
