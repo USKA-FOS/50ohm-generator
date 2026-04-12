@@ -90,6 +90,9 @@ class Navigation:
     def this_section_url(self, section: dict) -> str:
         return self.__ident_to_section_url(section["ident"])
 
+    def this_section_markdown(self, section: dict) -> str:
+        return section["ident"]+".md"
+
     def next_section(self, chapter: dict, section: dict) -> str | None:
         index = chapter["sections"].index(section)
         if index+1 == len(chapter["sections"]):
@@ -388,6 +391,7 @@ class Build:
                 # Second pass: render with hierarchical numbers
                 section["content"] = renderer.render(doc)
 
+                # FIXME: Remove markdown fter beta
                 result = section_template.render(
                     edition=edition,
                     name=edition_name,
@@ -397,7 +401,8 @@ class Build:
                     previous_chapter_url=self.navigation.previous_chapter_url(chapter),
                     next_chapter_url=self.navigation.next_chapter_url(chapter),
                     previous_section_url=self.navigation.previous_section_url(chapter, section),
-                    next_section_url=self.navigation.next_section_url(chapter, section)
+                    next_section_url=self.navigation.next_section_url(chapter, section),
+                    markdown=self.navigation.this_section_markdown(section)
                 )
 
                 result = self.__build_page(result, course_wrapper=True)
