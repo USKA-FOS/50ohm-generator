@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "\\MHz": "\\text{MHz}",
         "\\mm": "\\text{mm}",
         "\\MOhm": "\\text{M}\\Omega",
+        "\\Mohm": "\\text{M}\\Omega",
         "\\ms": "\\text{ms}",
         "\\mV": "\\text{mV}",
         "\\mW": "\\text{mW}",
