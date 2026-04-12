@@ -462,13 +462,27 @@ class Build:
             result = self.__build_page(result)
             file.write(result)
 
-    def build_edition(self, edition: str):
+    def build_unified_edition(self, toc_file: Path, edition: str, title: str, disabled_label: str):
+        """The Swiss way of generating editions: In contrast to upstream, we use one unified table
+        of contents and disable those sections that are not relevant to the current edition. This
+        ensures consistent numbering of chapters, sections, images etc. For now, we keep upstream
+        designators 'N', 'E', and 'A' internally. This method expects the following parameters:
+
+        :param toc_file: File name of JSON ToC, searched in self.config.p_data_toc
+        :param edition: Which edition to build from the unified ToC ('NE', 'A', 'NEA')
+        :param title: The tile of the edition.
+        :param disabled_label: A label for disabled sections that is inserted into the chapter overview.
+
+        Note that in contrast to upstream, we cannot pull the edition title from the ToC file
+        anymore and must pass it to this method instead.
+        """
         self.config.p_build.mkdir(exist_ok=True)
 
         edition = edition.upper()
 
         with (
-            (self.config.p_data_toc / f"{edition}.json").open() as file,
+            # FIXME: Consider adding toc_file to config.json
+            (self.config.p_data_toc / toc_file).open() as file,
             Progress(
                 TaskProgressColumn(),
                 BarColumn(),
@@ -479,6 +493,10 @@ class Build:
         ):
             chapter_task = progress.add_task(f"Building edition {edition} ...")
             book = json.load(file)
+            # FIXME: Not ideal to store this here since it may change during the
+            # lifetime of the Builder
+            self.disabled_label = disabled_label
+            self.__annotate_book(book, title, edition)
             edition_name = book["title"]
             self.navigation = Navigation(edition, book)
 
