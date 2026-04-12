@@ -34,7 +34,11 @@ class Navigation:
         if index == 0:
             return None
         else:
-            return self.chapters[index-1]
+            previous_chapter = self.chapters[index-1]
+            if not previous_chapter["disabled"]:
+                return previous_chapter
+            else:
+                return self.previous_chapter(previous_chapter)
 
     def previous_chapter_url(self, chapter: dict) -> str | None:
         previous_chapter = self.previous_chapter(chapter)
@@ -52,7 +56,11 @@ class Navigation:
         if index+1 == len(self.chapters):
             return None
         else:
-            return self.chapters[index+1]
+            next_chapter = self.chapters[index+1]
+            if not next_chapter["disabled"]:
+                return next_chapter
+            else:
+                return self.next_chapter(next_chapter)
 
     def next_chapter_url(self, chapter: dict) -> str | None:
         next_chapter = self.next_chapter(chapter)
@@ -61,22 +69,44 @@ class Navigation:
         else:
             return self.__ident_to_chapter_url(next_chapter["ident"])
 
-    def previous_section_url(self, chapter: dict, section: dict) -> str | None:
+    def previous_section(self, chapter: dict, section: dict) -> str | None:
         index = chapter["sections"].index(section)
         if index == 0:
             return None
         else:
-            return self.__ident_to_section_url(chapter["sections"][index-1]["ident"])
+            previous_section = chapter["sections"][index-1]
+            if not previous_section["disabled"]:
+                return previous_section
+            else:
+                return self.previous_section(chapter, previous_section)
+
+    def previous_section_url(self, chapter: dict, section: dict) -> str | None:
+        previous_section = self.previous_section(chapter, section)
+        if previous_section is None:
+            return None
+        else:
+            return self.__ident_to_section_url(previous_section["ident"])
 
     def this_section_url(self, section: dict) -> str:
         return self.__ident_to_section_url(section["ident"])
 
-    def next_section_url(self, chapter: dict, section: dict) -> str | None:
+    def next_section(self, chapter: dict, section: dict) -> str | None:
         index = chapter["sections"].index(section)
         if index+1 == len(chapter["sections"]):
             return None
         else:
-            return self.__ident_to_section_url(chapter["sections"][index+1]["ident"])
+            next_section = chapter["sections"][index+1]
+            if not next_section["disabled"]:
+                return next_section
+            else:
+                return self.next_section(chapter, next_section)
+
+    def next_section_url(self, chapter: dict, section: dict) -> str | None:
+        next_section = self.next_section(chapter, section)
+        if next_section is None:
+            return None
+        else:
+            return self.__ident_to_section_url(next_section["ident"])
 
     def section_preceding_chapter_url(self, chapter: dict) -> str | None:
         """Determine last section of preceding chapter"""
@@ -84,11 +114,20 @@ class Navigation:
         if index == 0:
             return None
         else:
-            return self.__ident_to_section_url(self.chapters[index-1]["sections"][-1]["ident"])
+            previous_section = self.chapters[index-1]["sections"][-1]
+            if not previous_section["disabled"]:
+                return self.__ident_to_section_url(previous_section["ident"])
+            else:
+                # FIXME: check logic here
+                return self.previous_section_url(self.chapters[index-1], previous_section)
 
     def section_first_of_chapter_url(self, chapter: dict) -> str:
         """Determine first section of chapter"""
-        return self.__ident_to_section_url(chapter["sections"][0]["ident"])
+        next_section = chapter["sections"][0]
+        if not next_section["disabled"]:
+            return self.__ident_to_section_url(next_section["ident"])
+        else:
+            return self.next_section_url(chapter, next_section)
 
     def __ident_to_chapter_url(self, ident):
         return f"{self.edition}_chapter_{ident}.html"
@@ -131,6 +170,21 @@ class Build:
                                 questions[question["number"]] = question
 
             return questions
+
+    def __annotate_book(self, book: dict, title: str, edition: str) -> None:
+        """Annotate the data struture obtained from the JSON ToC by adding title and edition and
+        checking if sections are part of the given edition. If they are not, insert a 'disabled'
+        key that can be used to gray out these sections when rendering."""
+        book['title'] = title
+        book['edition'] = edition
+        for chapter in book["chapters"]:
+            chapter["disabled"] = True
+            for section in chapter["sections"]:
+                if section["class"] in edition:
+                    section["disabled"] = False
+                    chapter["disabled"] = False
+                else:
+                    section["disabled"] = True
 
     def __build_question(self, number, template_file="html/question.html"):
         """Combines the original question dataset from BNetzA with our internal metadata"""
@@ -284,7 +338,8 @@ class Build:
                 previous_chapter_url=self.navigation.previous_chapter_url(chapter),
                 next_chapter_url=self.navigation.next_chapter_url(chapter),
                 previous_section_url=self.navigation.section_preceding_chapter_url(chapter),
-                next_section_url=self.navigation.section_first_of_chapter_url(chapter)
+                next_section_url=self.navigation.section_first_of_chapter_url(chapter),
+                disabled_label=self.disabled_label
             )
 
             result = self.__build_page(result, course_wrapper=True)
@@ -434,6 +489,7 @@ class Build:
         with (self.config.p_build / f"{book['edition']}_course_index.html").open("w") as file:
             result = template.render(
                 book=book,
+                disabled_label=self.disabled_label,
             )
             result = self.__build_page(result)
             file.write(result)
@@ -447,13 +503,27 @@ class Build:
             result = self.__build_page(result)
             file.write(result)
 
-    def build_edition(self, edition: str):
+    def build_unified_edition(self, toc_file: Path, edition: str, title: str, disabled_label: str):
+        """The Swiss way of generating editions: In contrast to upstream, we use one unified table
+        of contents and disable those sections that are not relevant to the current edition. This
+        ensures consistent numbering of chapters, sections, images etc. For now, we keep upstream
+        designators 'N', 'E', and 'A' internally. This method expects the following parameters:
+
+        :param toc_file: File name of JSON ToC, searched in self.config.p_data_toc
+        :param edition: Which edition to build from the unified ToC ('NE', 'A', 'NEA')
+        :param title: The tile of the edition.
+        :param disabled_label: A label for disabled sections that is inserted into the chapter overview.
+
+        Note that in contrast to upstream, we cannot pull the edition title from the ToC file
+        anymore and must pass it to this method instead.
+        """
         self.config.p_build.mkdir(exist_ok=True)
 
         edition = edition.upper()
 
         with (
-            (self.config.p_data_toc / f"{edition}.json").open() as file,
+            # FIXME: Consider adding toc_file to config.json
+            (self.config.p_data_toc / toc_file).open() as file,
             Progress(
                 TaskProgressColumn(),
                 BarColumn(),
@@ -464,6 +534,10 @@ class Build:
         ):
             chapter_task = progress.add_task(f"Building edition {edition} ...")
             book = json.load(file)
+            # FIXME: Not ideal to store this here since it may change during the
+            # lifetime of the Builder
+            self.disabled_label = disabled_label
+            self.__annotate_book(book, title, edition)
             edition_name = book["title"]
             self.navigation = Navigation(edition, book)
 

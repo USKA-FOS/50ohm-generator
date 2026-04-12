@@ -285,6 +285,7 @@ ul.fiftyohm-navbar {
   /* boostrap defaults are blue --> turn red */
   --bs-btn-active-bg: #ac2d24;
   --bs-btn-active-border-color: #ac2d24;
+  --bs-btn-disabled-color: #888;
 }
 .btn-primary {
   --bs-btn-color: #fff;

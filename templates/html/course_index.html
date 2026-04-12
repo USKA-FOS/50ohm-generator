@@ -2,8 +2,8 @@
 <p>{{ book["abstract"] }}</p>
 <div class="chapter-toc d-grid gap-2">
     {% for chapter in book["chapters"] %}
-        <a class="btn btn-outline-primary btn-labeled" href="{{ book["edition"] }}_chapter_{{ chapter["ident"] }}.html">
-            <span class="btn-label">{{loop.index}}</span>{{ chapter["title"]}}
+        <a class="btn btn-outline-primary btn-labeled {%if chapter.disabled %}disabled{% endif %}" href="{{ book["edition"] }}_chapter_{{ chapter["ident"] }}.html">
+            <span class="btn-label">{{loop.index}}</span>{{ chapter["title"]}}{%if chapter.disabled %} ({{disabled_label}}){% endif %}
         </a>
     {% endfor %}
 </div>
