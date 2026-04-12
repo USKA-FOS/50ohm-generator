@@ -34,7 +34,11 @@ class Navigation:
         if index == 0:
             return None
         else:
-            return self.chapters[index-1]
+            previous_chapter = self.chapters[index-1]
+            if not previous_chapter["disabled"]:
+                return previous_chapter
+            else:
+                return self.previous_chapter(previous_chapter)
 
     def previous_chapter_url(self, chapter: dict) -> str | None:
         previous_chapter = self.previous_chapter(chapter)
@@ -52,7 +56,11 @@ class Navigation:
         if index+1 == len(self.chapters):
             return None
         else:
-            return self.chapters[index+1]
+            next_chapter = self.chapters[index+1]
+            if not next_chapter["disabled"]:
+                return next_chapter
+            else:
+                return self.next_chapter(next_chapter)
 
     def next_chapter_url(self, chapter: dict) -> str | None:
         next_chapter = self.next_chapter(chapter)
@@ -61,22 +69,44 @@ class Navigation:
         else:
             return self.__ident_to_chapter_url(next_chapter["ident"])
 
-    def previous_section_url(self, chapter: dict, section: dict) -> str | None:
+    def previous_section(self, chapter: dict, section: dict) -> str | None:
         index = chapter["sections"].index(section)
         if index == 0:
             return None
         else:
-            return self.__ident_to_section_url(chapter["sections"][index-1]["ident"])
+            previous_section = chapter["sections"][index-1]
+            if not previous_section["disabled"]:
+                return previous_section
+            else:
+                return self.previous_section(chapter, previous_section)
+
+    def previous_section_url(self, chapter: dict, section: dict) -> str | None:
+        previous_section = self.previous_section(chapter, section)
+        if previous_section is None:
+            return None
+        else:
+            return self.__ident_to_section_url(previous_section["ident"])
 
     def this_section_url(self, section: dict) -> str:
         return self.__ident_to_section_url(section["ident"])
 
-    def next_section_url(self, chapter: dict, section: dict) -> str | None:
+    def next_section(self, chapter: dict, section: dict) -> str | None:
         index = chapter["sections"].index(section)
         if index+1 == len(chapter["sections"]):
             return None
         else:
-            return self.__ident_to_section_url(chapter["sections"][index+1]["ident"])
+            next_section = chapter["sections"][index+1]
+            if not next_section["disabled"]:
+                return next_section
+            else:
+                return self.next_section(chapter, next_section)
+
+    def next_section_url(self, chapter: dict, section: dict) -> str | None:
+        next_section = self.next_section(chapter, section)
+        if next_section is None:
+            return None
+        else:
+            return self.__ident_to_section_url(next_section["ident"])
 
     def section_preceding_chapter_url(self, chapter: dict) -> str | None:
         """Determine last section of preceding chapter"""
@@ -84,11 +114,20 @@ class Navigation:
         if index == 0:
             return None
         else:
-            return self.__ident_to_section_url(self.chapters[index-1]["sections"][-1]["ident"])
+            previous_section = self.chapters[index-1]["sections"][-1]
+            if not previous_section["disabled"]:
+                return self.__ident_to_section_url(previous_section["ident"])
+            else:
+                # FIXME: check logic here
+                return self.previous_section_url(self.chapters[index-1], previous_section)
 
     def section_first_of_chapter_url(self, chapter: dict) -> str:
         """Determine first section of chapter"""
-        return self.__ident_to_section_url(chapter["sections"][0]["ident"])
+        next_section = chapter["sections"][0]
+        if not next_section["disabled"]:
+            return self.__ident_to_section_url(next_section["ident"])
+        else:
+            return self.next_section_url(chapter, next_section)
 
     def __ident_to_chapter_url(self, ident):
         return f"{self.edition}_chapter_{ident}.html"
