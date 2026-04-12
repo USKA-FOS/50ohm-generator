@@ -485,14 +485,18 @@ class Build:
         return answers
 
     def __build_book_index(self, book):
-        template = self.env.get_template("html/course_index.html")
-        with (self.config.p_build / f"{book['edition']}_course_index.html").open("w") as file:
-            result = template.render(
-                book=book,
-                disabled_label=self.disabled_label,
-            )
-            result = self.__build_page(result)
-            file.write(result)
+        # We produce a normal index and a flat index where all sections are rolled out (see #6).
+        # The latter is not used in production but was requested during the beta phase, thus we
+        # create this silently for those who know the URL to the file.
+        for file_stem in "course_index", "course_unfolded_index":
+            template = self.env.get_template(f"html/{file_stem}.html")
+            with (self.config.p_build / f"{book['edition']}_{file_stem}.html").open("w") as file:
+                result = template.render(
+                    book=book,
+                    disabled_label=self.disabled_label,
+                )
+                result = self.__build_page(result)
+                file.write(result)
 
     def __build_slide_index(self, book):
         template = self.env.get_template("slide/slide_index.html")
