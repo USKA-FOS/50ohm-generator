@@ -398,7 +398,7 @@ class Build:
                     section=section,
                     section_id=section_id,
                     chapter=chapter,
-                    previous_chapter_url=self.navigation.previous_chapter_url(chapter),
+                    previous_chapter_url=self.navigation.this_chapter_url(chapter),
                     next_chapter_url=self.navigation.next_chapter_url(chapter),
                     previous_section_url=self.navigation.previous_section_url(chapter, section),
                     next_section_url=self.navigation.next_section_url(chapter, section),
