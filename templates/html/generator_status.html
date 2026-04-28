@@ -1,0 +1,29 @@
+  <div id="generator_status"></div>
+  <script>
+    function updateStatus() {
+      fetch('generator_status.json')
+        .then(res => res.json())
+        .then(data => {
+          let text;
+  
+          const el = document.getElementById('generator_status');
+          el.textContent = '';
+  
+          if (data.status === 'completed') {
+            const date = new Date(data.timestamp * 1000).toLocaleString(undefined, { hour12: false });
+            el.textContent = `Last build:\n${date}`;
+          } else if (data.status === 'running') {
+            const elapsed = Math.floor(Date.now() / 1000 - data.timestamp);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            const dot = document.createElement('span');
+            dot.className = 'dot';
+            el.append('Generator running:\n', dot, ` ${mins}m ${secs}s`);
+          }
+        });
+    }
+  
+    const n = 1; // poll interval in seconds
+    updateStatus();
+    setInterval(updateStatus, n * 1000);
+  </script>

@@ -18,3 +18,29 @@
   text-decoration: line-through;
   text-decoration-thickness: 1.5px;
 }
+
+/* For the generator status */
+#generator_status {
+  white-space: pre;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  text-align: right;
+  font-size: small;
+  margin: 10px;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
