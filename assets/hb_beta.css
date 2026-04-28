@@ -55,3 +55,8 @@
   border-radius: 4px;
   padding: 1rem;
 }
+
+/* Diff Button */
+.btn-diff {
+  background: linear-gradient(to right bottom, #ffebe9 50%, #dafbe1 50.3%);
+}
