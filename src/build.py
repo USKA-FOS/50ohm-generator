@@ -676,6 +676,7 @@ class Build:
         self.__build_course_page(snippets, "kurse-liste", "kurse_vor_ort_liste")
         self.__build_course_page(snippets, "patenkarte", "patenkarte")
         self.__build_course_page(snippets, "todo", "todo")
+        self.__build_course_page(snippets, "diff", "diff")
         self.__build_html_page(contents, "pruefung")
         self.__build_html_page(contents, "infos")
 
