@@ -15,6 +15,7 @@
     </p>
   </div>
   <div>
+    <h1>&nbsp;</h1>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -77,13 +78,14 @@
       <h2>Online lernen</h2>
       <p>Bringe dir das nötige Wissen für die Amateurfunkprüfung einfach selber bei. Unser Lernmaterial hilft dir auf deinem Weg! Es gibt die beiden <a href="infos.html">Klassen HB3 und HB9</a> mit unterschiedlichen Schweregraden und Privilegien.</p>
       <h5>Kurse</h5>
-      <p>Wir bieten Materialien zu den folgenden Kursen online an:</p>
+      <p>Wir bieten Lerninhalte in folgenden Editionen online an:</p>
       <div class="row row-cols-lg-3 g-2">
         <div class="col"><a href="NE_course_index.html" class="btn btn-outline-dark w-100">HB3<br><small>Einsteiger</small></a></div>
         <div class="col"><a href="A_course_index.html" class="btn btn-outline-dark w-100 disabled">HB3 -> HB9<br><small>Upgrade auf HB9</small></a></div>
         <div class="col"><a href="NEA_course_index.html" class="btn btn-outline-dark w-100 disabled">HB3 &amp; HB9<br><small>Gesamtkurs</small></a></div>
       </div>
       <br>
+      {#
       <h5>Fragestunden</h5>
       <p>Tauchen beim Selbststudium Fragen auf? Unsere ehrenamtlichen Helfer bieten für DARC-Mitglieder eine Fragestunde auf dem DARC-Videokonferenzserver an.</p>
       <div class="row row-cols-lg-2">
@@ -91,17 +93,17 @@
         <div class="col"><a href="https://treff.darc.de/d/#/teilnehmer/964LmqHw" class="btn btn-outline-dark w-100">Sonntags 18:00</a></div>
       </div>
       <br>
-      <h5>DARC Chat</h5>
-      <p>Der DARC e. V. betreibt eine eigene Matrix-Instanz. Dort gibt es einen Raum, in denen du deine Fragen stellen kannst:</p>
+      #}
+      <h5>USKA Chat</h5>
+      <p>Die USKA betreibt für 50Ω eine eigenen Matrix-Instanz. Dort gibt es einen Raum, in dem du deine Fragen zur Ausbildung oder während der Ausbildung stellen kannst:</p>
       <div class="row row-cols-lg-3">
         <div class="col"><a href="https://matrix.to/#/#ausbildung:darc.de" class="btn btn-outline-dark w-100">💬 Ausbildung</a></div>
       </div>
       <br>
       <h5>Mitglied werden</h5>
-      <p>Der <a href="https://darc.de">DARC e. V.</a> unterstützt Dich auf deinem Weg zum Amateurfunkzeugnis und ist die größte Interessensvertretung der Funkamateure in Deutschland.</p>
+      <p>Die <a href="https://uska.ch/">USKA</a> ist der Verband der Funkamateure in der Schweiz. Ihre Mitglieder begleiten dich auf dem Weg zur Amateurfunkprüfung und danach.</p>
       <div class="row row-cols-lg-2">
-        <div class="col"><a href="https://www.darc.de/mitgliedschaft/mitglied-werden/" class="btn btn-outline-dark w-100">Mitglied Werden</a></div>
-        <div class="col"><a href="https://www.darc.de/mitgliedschaft/mitglied-werden/#c154065" class="btn btn-outline-dark w-100">Gastmitgliedschaft</a></div>
+        <div class="col"><a href="https://uska.ch/en/die-uska/administration/uska-mitglied-werden/" class="btn btn-outline-dark w-100">Mitglied werden</a></div>
       </div>
     </div>
   </div>
@@ -111,12 +113,13 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#5f6368"><path d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/></svg>
       </div>
       <h2>Videokurse</h2>
-      <p>In Zusammenarbeit mit DL2YMR ist ein Videokurs für die Klasse N entstanden, der auf seinem YouTube-Kanal abrufbar ist.</p>
+      <p>50Ω Schweiz basiert auf <a href="https://50ohm.de">50Ohm.de</a> mit den Fragen der Bundesnetzagentur Deutschland. Die deutschen Videokurse sind auch in der Schweiz nützlich für die Ausbildung in Technik und Betriebstechnik. Die Vorschriften hingegen unterscheiden sich in der Schweiz deutlich von denjenigen in Deutschland. Für eine Prüfungsvorbereitung im Bereich Vorschriften sind diese Videos daher nicht geeignet.</p>
       <div class="d-grid gap-2 d-md-block mb-5">
         <a href="https://www.youtube.com/playlist?list=PLDpWnjHk5ERbcgpLPUaU0iTsD-wrmfENk" class="btn btn-primary">Zum Videokurs Klasse N</a>
         <a href="https://www.youtube.com/playlist?list=PL_JZo16Mzs5XGeN5N81MwQ70dp7478VkM" class="btn btn-primary">Vorlesung Klasse N+E</a>
       </div>
     </div>
+    {#
     <div class="feature col">
       <img style="float: right; width: 33%;" src="assets/images/darc-amateurfunklehrgang-klasse-n.jpg">
       <div class="feature-icon bg-primary bg-gradient">
@@ -129,6 +132,7 @@
         <a href="https://www.amazon.de/dp/388692100X" class="btn btn-primary">Amazon</a>
       </div>
     </div>
+    #}
     <div class="feature col">
       <div class="feature-icon bg-primary bg-gradient">
         <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 0 640 512" width="48"><path d="M337.8 5.4C327-1.8 313-1.8 302.2 5.4L166.3 96 48 96C21.5 96 0 117.5 0 144L0 464c0 26.5 21.5 48 48 48l208 0 0-96c0-35.3 28.7-64 64-64s64 28.7 64 64l0 96 208 0c26.5 0 48-21.5 48-48l0-320c0-26.5-21.5-48-48-48L473.7 96 337.8 5.4zM96 192l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM96 320l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM232 176a88 88 0 1 1 176 0 88 88 0 1 1 -176 0zm88-48c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-16 0 0-16c0-8.8-7.2-16-16-16z"/></svg>
@@ -136,18 +140,17 @@
       <h2>Kurse</h2>
       <p>Einige unserer Ortsverbände bieten Präsenz- oder Onlinekurse mit erfahrenen Ausbildern an. Finde heraus, ob es einen für dich passenden Kurs bei dir in der Nähe gibt!</p>
       <div class="d-grid gap-2 d-md-block mb-5">
-        <a href="kurse_vor_ort_karte.html" class="btn btn-primary">Präsenz</a>
-        <a href="kurse_vor_ort_liste.html" class="btn btn-primary">Online</a>
+        <a href="https://uska.ch/amateurfunk-ausbildungskurse/" class="btn btn-primary">Liste der Kursanbieter</a>
       </div>
     </div>
     <div class="feature col">
       <div class="feature-icon bg-primary bg-gradient">
         <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 0 448 512" width="48"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/></svg>
       </div>
-      <h2>Ausbildungs&shy;paten</h2>
-      <p>Unsere Ausbildungspaten sind erfahrene Funkamateure, die dich gerne unterstützen. Sie können mit dir auch praktischen üben und nützliche Tipps für die Praxis geben.</p>
+      <h2>Coaching</h2>
+      <p>Unsere Ausbildungs-Coaches sind erfahrene Funkamateure, die dich gerne unterstützen. Sie können mit dir auch praktischen üben und nützliche Tipps für die Praxis geben.</p>
       <div class="d-grid gap-2 d-md-block mb-5">
-        <a href="patenkarte.html" class="btn btn-primary">Zur Patenkarte</a>
+        <a href="todo.html" class="btn btn-primary">Zum USKA-Coaching</a>
       </div>
     </div>
     <div class="feature col">
@@ -155,11 +158,14 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 0 384 512" width="48"><path d="M192 0c-41.8 0-77.4 26.7-90.5 64L64 64C28.7 64 0 92.7 0 128L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-37.5 0C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM105.8 229.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L216 328.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM160 416a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
       </div>
         <h2>Fragenkatalog</h2>
-        <p>Den Fragenkatalog mit den amtlichen Prüfungsfragen gibt es digital bei der <a href="https://50ohm.de/fk">Bundesnetzagentur</a>. Beim DARC-Verlag kann man auch eine gedruckte Version bestellen.</p>
+      <p>
+        <p>Einen Fragenkatalog mit den amtlichen Prüfungsfragen gibt es derzeit leider nicht.</p>
+        <p>Hier kann man sich einen Katalog mit den in unseren Lerninhalten dargestellten Fragen herunterladen.</p>
         <div class="d-grid gap-2 d-md-block mb-5">
-          <a href="https://darcverlag.de/Fragenkatalog-Klasse-N" class="btn btn-primary">Beim DARC-Verlag kaufen</a>
+        <a href="todo.html" class="btn btn-primary">Download Fragenkatalog</a>
         </div>
       </div>
+      {#
       <div class="feature col">
       <div class="feature-icon bg-primary bg-gradient">
         <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 0 384 512" width="48"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64L80 64l0 320 224 0 0-320z"/></svg>
@@ -170,7 +176,8 @@
           <a href="https://play.google.com/store/apps/details?id=de.darc.fuenfizigohm" class="btn btn-primary">Android</a>
           <a href="https://apps.apple.com/de/app/50ohm/id6474642114" class="btn btn-primary">iOS</a>
         </div>
-      </div>    
+      </div>
+      #}
   </div>
 </div>
 <a rel="me" href="https://social.darc.de/@AJW"></a>
