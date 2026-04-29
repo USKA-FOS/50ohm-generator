@@ -44,3 +44,11 @@
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.15; }
 }
+
+error-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #e53e3e;
+}
