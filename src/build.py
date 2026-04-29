@@ -214,15 +214,21 @@ class Build:
             if number in metadata_json:
                 metadata = metadata_json[number]
 
-            if question is None or metadata is None:
+            if question is None:
                 tqdm.write(
                     f"\033[31mQuestion #{number} is missing"
-                    + (" (Question not in question pool)" if question is None else "")
+                    + (" (Question not in question pool)")
+                    + "\033[0m"
+                )
+                question = {"question": f"Frage {input} nicht gefunden"}
+
+            if metadata is None:
+                tqdm.write(
+                    f"\033[31mQuestion #{number} is missing"
                     + (" (Question not in metadata)" if metadata is None else "")
                     + "\033[0m"
                 )
                 metadata = {"layout": "not-found", "picture_a": ""}
-                question = {"question": f"Frage {input} nicht gefunden"}
 
             if question_upstream is None:
                 question_upstream = {"question": f"Frage {input} nicht gefunden"}
@@ -268,7 +274,10 @@ class Build:
             solution_file = self.config.p_data_solutions / f"{number}.md"
 
             question_parsed = convert_latex(question["question"])
-            question_upstream_parsed = convert_latex(question_upstream["question"])
+            if question_upstream["question"] is not None:
+                question_upstream_parsed = convert_latex(question_upstream["question"])
+            else:
+                question_upstream_parsed = None
 
             if answers and answers[0] is not None:
                 answers_parsed = [convert_latex(a) for a in answers]

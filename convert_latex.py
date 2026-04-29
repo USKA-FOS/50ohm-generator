@@ -32,5 +32,5 @@ def _replace(m: re.Match) -> str:
     return m.group(0)  # unreachable
 
 
-def convert_latex(s: str) -> str:
+def convert_latex(s: str | None) -> str | None:
     return _PATTERN.sub(_replace, s)
