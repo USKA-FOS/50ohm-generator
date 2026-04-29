@@ -12,13 +12,20 @@
           if (data.status === 'completed') {
             const date = new Date(data.timestamp * 1000).toLocaleString(undefined, { hour12: false });
             el.textContent = `Last build:\n${date}`;
-          } else if (data.status === 'running') {
+          } else if (data.status === 'running' || data.status === 'finalizing') {
             const elapsed = Math.floor(Date.now() / 1000 - data.timestamp);
-            const mins = Math.floor(elapsed / 60);
-            const secs = elapsed % 60;
             const dot = document.createElement('span');
-            dot.className = 'dot';
-            el.append('Generator running:\n', dot, ` ${mins}m ${secs}s`);
+            if (elapsed > 300) {
+              const date = new Date(data.timestamp * 1000).toLocaleString(undefined, { hour12: false });
+              dot.className = 'error-dot';
+              el.append('Generator crashed?\n', dot, ` ${date}`);
+            } else {
+              const mins = Math.floor(elapsed / 60);
+              const secs = elapsed % 60;
+              dot.className = 'dot';
+              const label = data.status === 'finalizing' ? 'Finalizing...' : 'Generator running:';
+              el.append(`${label}\n`, dot, ` ${mins}m ${secs}s`);
+            }
           }
         });
     }
