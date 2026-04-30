@@ -210,17 +210,23 @@ class Build:
                     question_upstream = question.copy()
                     question_upstream['question'] = None  # This is how we encode new questions
 
+            elif number in self.questions_upstream:
+                question_upstream = self.questions_upstream[number]
+                question = question_upstream.copy()
+                question['question'] = None  # This is how we encode pruned questions
 
             if number in metadata_json:
                 metadata = metadata_json[number]
 
-            if question is None:
+            if question is None and question_upstream is None:
                 tqdm.write(
                     f"\033[31mQuestion #{number} is missing"
                     + (" (Question not in question pool)")
                     + "\033[0m"
                 )
                 question = {"question": f"Frage {input} nicht gefunden"}
+                question_upstream = {"question": f"Frage {input} nicht gefunden"}
+                metadata = {"layout": "not-found", "picture_a": ""}
 
             if metadata is None:
                 tqdm.write(
@@ -228,10 +234,8 @@ class Build:
                     + (" (Question not in metadata)" if metadata is None else "")
                     + "\033[0m"
                 )
-                metadata = {"layout": "not-found", "picture_a": ""}
-
-            if question_upstream is None:
-                question_upstream = {"question": f"Frage {input} nicht gefunden"}
+                # metadata = {"layout": "not-found", "picture_a": ""}
+                metadata = {"layout": "", "picture_a": ""}
 
             if "answer_a" in question:
                 answers = [question["answer_a"], question["answer_b"], question["answer_c"], question["answer_d"]]
@@ -273,7 +277,11 @@ class Build:
 
             solution_file = self.config.p_data_solutions / f"{number}.md"
 
-            question_parsed = convert_latex(question["question"])
+            if question["question"] is not None:
+                question_parsed = convert_latex(question["question"])
+            else:
+                question_parsed = None
+
             if question_upstream["question"] is not None:
                 question_upstream_parsed = convert_latex(question_upstream["question"])
             else:
