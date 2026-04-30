@@ -457,7 +457,7 @@ class Build:
 
                 section_counter = 0
                 slides_task = progress.add_task("Rendering slides ...")
-                for section in progress.track(sections, task_id=slides_task):
+                for section in progress.track(filter(lambda s: not s["disabled"], sections), task_id=slides_task):
                     progress.update(slides_task, description=f"Rendering slides of {section['title']}")
 
                     if section["slide"] is None:
@@ -581,6 +581,9 @@ class Build:
                 section_task = progress.add_task(description="Rendering sections ...")
                 for section_number, section in enumerate(progress.track(chapter["sections"], task_id=section_task), 1):
                     progress.update(section_task, description=f"Rendering section {section['title']}")
+
+                    if section["disabled"]:
+                        continue
 
                     # Read section and slide content from the corresponding files.
                     ident = section["ident"]
