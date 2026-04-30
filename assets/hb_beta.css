@@ -52,3 +52,19 @@
   border-radius: 50%;
   background-color: #e53e3e;
 }
+
+/* For the Markdown diff page */
+#output {
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+/* Diff Button */
+.btn-diff {
+  background: linear-gradient(to right bottom, #ffebe9 50%, #dafbe1 50.3%);
+}
