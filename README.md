@@ -5,6 +5,7 @@
 - Anpassungen an Logos, Favicons, Schriften und Farbpalette (siehe Issues #2, #3, #15, #16)
 - Konsistente Vorwärts/Zurück-Navigation  (siehe Issue #5)
 - Diff-Modus für modifizierte Fragen (siehe Issue #12)
+- Angabe der Gründe, weshalb eine Frage verändert wurde ("Rationale", siehe #17).
 - Inhaltsverzeichnisse mit gleicher Nummerierung für alle Editionen (siehe Issue #8).
 - Direktes Rendering von Directus-Einheitungen (siehe Issue #14)
 - Datum und Zeit der letzten Seitengenerierung bzw. Anzeige, wenn der Seitengenerator aktiv ist.
