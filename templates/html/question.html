@@ -28,6 +28,11 @@
       </button>
     {% endfor %}
   </div>
+  {% if rationale is not none %}
+  <div class="rationale">
+    <span class="highlight">Rationale:</span> {{ rationale }}
+  </div>
+  {% endif %}
 </div>
 <div class="solution">
   {% if has_solution %}

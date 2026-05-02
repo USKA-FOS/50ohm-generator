@@ -52,3 +52,15 @@ error-dot {
   border-radius: 50%;
   background-color: #e53e3e;
 }
+
+/* Rationale: Explanation why questions were altered/added/pruned */
+.rationale {
+  padding: 10px 0px 0px 5px;
+  .highlight {
+    color: white;
+    font-weight: bold;
+    background: #cf163e;
+    padding: 3px;
+    border-radius: 5px;
+  }
+}
