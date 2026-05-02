@@ -3,9 +3,9 @@
     {% if question is not none and question_upstream is not none %}
     {{ number }}: {{ question | diff(question_upstream) }}
     {% elif question is none %}
-    <span class="diff removed">{{ number }} (gelöscht)</span>: {{ question_upstream }}
+    <i><span class="diff removed">{{ number }} (gelöscht)</span>: {{ question_upstream }}</i>
     {% elif question_upstream is none %}
-    <span class="diff added">{{ number }} (neu)</span>: {{ question }}
+    <i><span class="diff added">{{ number }} (neu)</span>: {{ question }}</i>
     {% endif %}
   </div>
   {% if picture_question %}
