@@ -68,3 +68,16 @@
 .btn-diff {
   background: linear-gradient(to right bottom, #ffebe9 50%, #dafbe1 50.3%);
 }
+
+/* Rationale: Explanation why questions were altered/added/pruned */
+.rationale {
+  padding: 10px 0px 0px 5px;
+  .highlight {
+    color: white;
+    font-weight: bold;
+    background: #cf163e;
+    padding: 3px;
+    border-radius: 5px;
+  }
+}
+

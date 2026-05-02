@@ -200,9 +200,11 @@ class Build:
             question = None
             question_upstream = None
             metadata = None
+            rationale = None
 
             if number in self.questions:
                 question = self.questions[number]
+                rationale = question['HB.rationale']
                 # FIXME: Remove after beta
                 if number in self.questions_upstream:
                     question_upstream = self.questions_upstream[number]
@@ -309,6 +311,7 @@ class Build:
                 alt_text_answers=alt_text_answers,
                 alt_text_question=alt_text_question,
                 has_solution=solution_file.exists(),
+                rationale=rationale,
             )
 
     def __build_question_slide(self, input):
