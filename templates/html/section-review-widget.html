@@ -1,0 +1,90 @@
+  <div id="workflow-control"></div>
+  <script>
+  (function () {
+    /* Inject HTML and attach button handlers (scripts in innerHTML never run). */
+    async function inject(div, html) {
+      div.innerHTML        = html;
+      div.style.background = 'transparent';
+      div.style.padding    = '4px 0';
+
+      var inner   = div.querySelector('[data-wf-server]');
+      var editBtn = document.getElementById('github-edit-button');
+      if (editBtn) {
+        var disabled = true;
+        if (inner && inner.dataset.wfShowAsAdmin !== 'true') {
+          /* Non-admin mode: enable only when Freigegeben, not Frei, and user is assignee. */
+	  var s = inner.dataset.wfStage;
+          disabled = inner.dataset.wfStatus !== 'Freigegeben'
+		  || s.trim() === '' || s === '1F' || s === '2F'
+                  || inner.dataset.wfAssignee !== inner.dataset.wfUser;
+        } else if (inner) {
+          /* Admin mode: leave the button unchanged. */
+          disabled = editBtn.classList.contains('disabled');
+        }
+        editBtn.classList.toggle('disabled', disabled);
+      }
+
+      if (!inner) return;
+      var server = inner.dataset.wfServer;
+      var item   = inner.dataset.wfItem;
+
+      var stageBtn  = div.querySelector('#wf-stage-btn');
+      var statusBtn = div.querySelector('#wf-status-btn');
+      if (stageBtn)  stageBtn.addEventListener('click',  function () { changeStage(div, server, item); });
+      if (statusBtn) statusBtn.addEventListener('click', function () { changeStatus(div, server, item); });
+    }
+
+    async function reload(div, server, item) {
+      try {
+        var r = await fetch(server + '/api/widget/' + item, {credentials: 'include'});
+        if (r.ok) await inject(div, await r.text());
+      } catch (_) {}
+    }
+
+    async function changeStage(div, server, item) {
+      var sel = div.querySelector('#wf-stage-sel');
+      var btn = div.querySelector('#wf-stage-btn');
+      btn.disabled = true;
+      try {
+        var r = await fetch(server + '/api/items/' + item + '/stage', {
+          method: 'PATCH', credentials: 'include',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({stage: sel.value}),
+        });
+        if (r.ok) { await reload(div, server, item); }
+        else { var d = await r.json(); alert(d.detail || 'Fehler'); btn.disabled = false; }
+      } catch (e) { alert('Verbindungsfehler'); btn.disabled = false; }
+    }
+
+    async function changeStatus(div, server, item) {
+      var sel = div.querySelector('#wf-status-sel');
+      var btn = div.querySelector('#wf-status-btn');
+      btn.disabled = true;
+      try {
+        var r = await fetch(server + '/admin/items/' + item, {
+          method: 'PATCH', credentials: 'include',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({status: sel.value}),
+        });
+        if (r.ok) { await reload(div, server, item); }
+        else { var d = await r.json(); alert(d.detail || 'Fehler'); btn.disabled = false; }
+      } catch (e) { alert('Verbindungsfehler'); btn.disabled = false; }
+    }
+
+    async function load() {
+      var div = document.getElementById('workflow-control');
+      if (!div) return;
+      try {
+        var r = await fetch('/review_workflow/api/widget/{{ markdown|replace('.md', '') }}', {credentials: 'include'});
+        if (r.ok) await inject(div, await r.text());
+        else div.style.display = 'none';
+      } catch (e) { div.style.display = 'none'; }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', load);
+    } else {
+      load();
+    }
+  })();
+  </script>

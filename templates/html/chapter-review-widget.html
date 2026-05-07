@@ -1,0 +1,85 @@
+<div id="workflow-control"></div>
+<script>
+(function () {
+  /* Inject HTML and attach click handlers (scripts inside innerHTML never execute). */
+  function inject(div, html) {
+    div.innerHTML        = html;
+    div.style.background = 'transparent';
+    div.style.padding    = '4px 0';
+
+    var inner = div.querySelector('[data-wf-server]');
+    if (!inner) return;
+
+    var server = inner.dataset.wfServer;
+    var group  = inner.dataset.wfGroup;
+
+    var ueberarbeitenBtn = div.querySelector('#wf-ueberarbeiten-btn');
+    var reviewenBtn      = div.querySelector('#wf-reviewen-btn');
+
+    if (ueberarbeitenBtn) {
+      ueberarbeitenBtn.addEventListener('click', function () {
+        claimChapter(div, server, group, '1W', ueberarbeitenBtn);
+      });
+    }
+    if (reviewenBtn) {
+      reviewenBtn.addEventListener('click', function () {
+        claimChapter(div, server, group, '2W', reviewenBtn);
+      });
+    }
+  }
+
+  async function claimChapter(div, server, group, targetStage, btn) {
+    var originalText = btn.textContent;
+    btn.disabled = true;
+    try {
+      var r = await fetch(server + '/api/chapter-widget/' + group, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({target_stage: targetStage}),
+      });
+      if (r.ok) {
+        var data = await r.json();
+        if (!document.getElementById('wf-chapter-anim-style')) {
+          var st = document.createElement('style');
+          st.id = 'wf-chapter-anim-style';
+          st.textContent = '@keyframes wf-reserviert{0%,100%{opacity:1}50%{opacity:.45}}';
+          document.head.appendChild(st);
+        }
+        btn.textContent = data.updated + ' Abschnitt' + (data.updated !== 1 ? 'e' : '') + ' reserviert';
+        btn.style.cssText += ';background:#198754;color:#fff;border-color:#198754;animation:wf-reserviert 1s ease-in-out infinite';
+        setTimeout(async function () {
+          var reloaded = await fetch(server + '/api/chapter-widget/' + group, {credentials: 'include'});
+          if (reloaded.ok) inject(div, await reloaded.text());
+          else { btn.textContent = originalText; btn.style.cssText = ''; btn.disabled = false; }
+        }, 3000);
+      } else {
+        var d = await r.json();
+        alert(d.detail || 'Fehler');
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('Verbindungsfehler');
+      btn.disabled = false;
+    }
+  }
+
+  async function load() {
+    var div = document.getElementById('workflow-control');
+    if (!div) return;
+    try {
+      var r = await fetch('/review_workflow/api/chapter-widget/{{ number }}', {credentials: 'include'});
+      if (r.ok) inject(div, await r.text());
+      else div.style.display = 'none';
+    } catch (e) {
+      div.style.display = 'none';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', load);
+  } else {
+    load();
+  }
+})();
+</script>

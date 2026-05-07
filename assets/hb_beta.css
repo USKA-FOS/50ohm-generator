@@ -81,3 +81,11 @@
   }
 }
 
+/* Widget for workflow control */
+#workflow-control {
+  width: 59.3%;
+  padding: 6px 10px;
+  min-height: 48px;
+  display:flex;
+  align-items:center;
+}
