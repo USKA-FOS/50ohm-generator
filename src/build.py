@@ -147,14 +147,14 @@ class Build:
         self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
         self.env.filters["diff"] = diff_filter  # FIXME: remove after beta
-        self.questions = self.__parse_katalog(self.config.p_data_fragenkatalog)
+        self.questions, self.rationales_for_pruned = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
         if self.config.p_data_fragenkatalog_upstream is not None:
-            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog_upstream)
+            self.questions_upstream, _ = self.__parse_katalog(self.config.p_data_fragenkatalog_upstream)
         else:
             # Loading the regular pool as upstream pool will create empty diffs
-            self.questions_upstream = self.__parse_katalog(self.config.p_data_fragenkatalog)
+            self.questions_upstream, _ = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         self.question_index = {}
         self.question_token_pattern = re.compile(r"^\s*\[question:([\w\d]+)\]", re.MULTILINE)
@@ -179,7 +179,12 @@ class Build:
                             for question in section["questions"]:
                                 questions[question["number"]] = question
 
-            return questions
+            # Collect rationales of pruned questions of they exists. FIXME: Remove after beta
+            if "pruned" in fragenkatalog:
+                rationales_for_pruned = fragenkatalog["pruned"]
+            else:
+                rationales_for_pruned = {}
+            return questions, rationales_for_pruned
 
     def __annotate_book(self, book: dict, title: str, edition: str) -> None:
         """Annotate the data struture obtained from the JSON ToC by adding title and edition and
@@ -223,6 +228,7 @@ class Build:
                 question_upstream = self.questions_upstream[number]
                 question = question_upstream.copy()
                 question['question'] = None  # This is how we encode pruned questions
+                rationale = self.rationales_for_pruned.get(number)
 
             if number in metadata_json:
                 metadata = metadata_json[number]
