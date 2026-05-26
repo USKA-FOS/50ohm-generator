@@ -424,7 +424,7 @@ class Build:
                 # Second pass: render with hierarchical numbers
                 section["content"] = renderer.render(doc)
 
-                # FIXME: Remove markdown fter beta
+                # FIXME: Remove repo and markdown fter beta
                 result = section_template.render(
                     edition=edition,
                     name=edition_name,
@@ -435,6 +435,7 @@ class Build:
                     next_chapter_url=self.navigation.next_chapter_url(chapter),
                     previous_section_url=self.navigation.previous_section_url(chapter, section),
                     next_section_url=self.navigation.next_section_url(chapter, section),
+                    repo=self.config.get_config_value('repo_base_url'),
                     markdown=self.navigation.this_section_markdown(section)
                 )
 

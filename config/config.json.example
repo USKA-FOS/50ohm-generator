@@ -1,5 +1,6 @@
 {
   "input" : "/home/your_path_to/50ohm-contents-dl",
   "questions" : "fragenkatalog3b.json",
-  "questions_upstream" : null
+  "questions_upstream" : null,
+  "repo_base_url" : null
 }
