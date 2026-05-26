@@ -575,7 +575,7 @@ class Build:
             ) as progress,
         ):
             chapter_task = progress.add_task(f"Building edition {edition} ...")
-            book = json.load(file)
+            book = json.loads(file.read().replace('ß', 'ss'))
             # FIXME: Not ideal to store this here since it may change during the
             # lifetime of the Builder
             self.disabled_label = disabled_label
@@ -607,10 +607,10 @@ class Build:
                     section["content"] = None
                     section["slide"] = None
                     with (self.config.p_data_sections / f"{ident}.md").open() as sfile:
-                        section_content = sfile.read()
+                        section_content = sfile.read().replace('ß', 'ss')
                         section["content"] = section_content
                     with (self.config.p_data_slides / f"{ident}.md").open() as sfile:
-                        section_content = sfile.read()
+                        section_content = sfile.read().replace('ß', 'ss')
                         section["slide"] = section_content
 
                     if section["content"] is not None:
