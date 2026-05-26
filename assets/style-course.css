@@ -467,4 +467,11 @@ p, div.question, ul, ol {
   .katex .accent-body {
     font-family: Katex_Main;
   }
+
+/* Quiz-Modus */
+body[data-quiz-mode][data-quiz-has-questions] .course > * {
+  display: none !important;
+}
+body[data-quiz-mode][data-quiz-has-questions] .course > [data-quiz-shown] {
+  display: revert !important;
 }
