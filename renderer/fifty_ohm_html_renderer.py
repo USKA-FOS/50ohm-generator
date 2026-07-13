@@ -38,6 +38,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         picture_handler=None,
         photo_handler=None,
         include_handler=None,
+        ui_labels=None,
         edition=None,
         chapter=None,
         section=None,
@@ -76,6 +77,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         self.picture_handler = picture_handler
         self.photo_handler = photo_handler
         self.include_handler = include_handler
+        self.ui_labels = ui_labels or {}
 
         # Figure numbering context
         self.edition = edition
@@ -269,7 +271,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         return f"""
                 <figure class="picture" id="ref_{ref}" name="{ref}">
                     <img src="pictures/{id}.svg" alt="{alt_text}">
-                    <figcaption>Abbildung {number}: {text}</figcaption>
+                    <figcaption>{{FIGURE_LABEL}} {number}: {text}</figcaption>
                 </figure>
             """
 
@@ -278,14 +280,20 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         if self.picture_handler is not None:
             alt_text = self.picture_handler(token.id)
 
-        return self.render_picture_helper(token.id, token.ref, token.text, token.number, alt_text)
+        return self.render_picture_helper(
+            token.id,
+            token.ref,
+            token.text,
+            token.number,
+            alt_text,
+        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", "Abbildung"))
 
     @staticmethod
     def render_photo_helper(id, ref, text, number, alt_text):
         return f"""
                 <figure class="photo" id="ref_{ref}" name="{ref}">
                     <img src="photos/{id}.png" alt="{alt_text}">
-                    <figcaption>Abbildung {number}: {text}</figcaption>
+                    <figcaption>{{FIGURE_LABEL}} {number}: {text}</figcaption>
                 </figure>
             """
 
@@ -293,7 +301,13 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         alt_text = ""
         if self.photo_handler is not None:
             alt_text = self.photo_handler(token.id) or alt_text
-        return self.render_photo_helper(token.id, token.ref, token.text, token.number, alt_text)
+        return self.render_photo_helper(
+            token.id,
+            token.ref,
+            token.text,
+            token.number,
+            alt_text,
+        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", "Abbildung"))
 
     def render_table(self, token: Table):
         # Add id and name attributes if table has a name
@@ -307,7 +321,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             # Include hierarchical number in caption if available
             caption_text = token.caption
             if hasattr(token, "number") and token.number:
-                caption_text = f"Tabelle {token.number}: {token.caption}"
+                caption_text = f"{self.ui_labels.get('table_label', 'Tabelle')} {token.number}: {token.caption}"
             table += f"<caption>{caption_text}</caption>\n"
 
         table += "</table>"

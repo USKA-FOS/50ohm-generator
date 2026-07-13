@@ -6,7 +6,7 @@ import shutil
 import zipfile
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import ChoiceLoader, Environment, FileSystemLoader
 from mistletoe import Document
 from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn, TimeRemainingColumn
 from tqdm import tqdm
@@ -143,10 +143,12 @@ class Navigation:
 class Build:
     def __init__(self, config: Config):
         self.config = config
-
-        self.env = Environment(loader=FileSystemLoader(self.config.p_templates))
+        self.ui_labels = self.__load_ui_labels()
+        self.env = Environment(loader=self.__template_loader())
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
         self.env.filters["diff"] = diff_filter  # FIXME: remove after beta
+        self.env.globals["ui"] = self.__ui
+        self.env.globals["lang"] = self.config.language
         self.questions, self.rationales_for_pruned = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
@@ -161,6 +163,29 @@ class Build:
 
         self.index_entries = {}
         self.index_token_pattern = Index.pattern
+
+    def __template_loader(self):
+        loaders = []
+        language_templates = self.config.p_generator_extra_content_language / "templates"
+        default_templates = self.config.p_generator_extra_content_default / "templates"
+        if language_templates.exists():
+            loaders.append(FileSystemLoader(language_templates))
+        if default_templates.exists():
+            loaders.append(FileSystemLoader(default_templates))
+        loaders.append(FileSystemLoader(self.config.p_templates))
+        return ChoiceLoader(loaders)
+
+    def __load_ui_labels(self) -> dict:
+        labels = {}
+        default_path = self.config.p_generator_extra_content_default / "labels.json"
+        language_path = self.config.p_generator_extra_content_language / "labels.json"
+        for path in (default_path, language_path):
+            if path.exists():
+                labels.update(json.loads(path.read_text(encoding="utf-8")))
+        return labels
+
+    def __ui(self, key: str, default: str = "") -> str:
+        return str(self.ui_labels.get(key, default))
 
     def __parse_katalog(self, path: Path):
         with path.open() as file:
@@ -205,6 +230,7 @@ class Build:
         """Combines the original question dataset from BNetzA with our internal metadata"""
 
         question_template = self.env.get_template(template_file)
+        is_pruned = number in self.rationales_for_pruned
 
         with (self.config.p_data_metadata).open() as file:
             metadata_json = json.load(file)
@@ -229,6 +255,10 @@ class Build:
                 question = question_upstream.copy()
                 question['question'] = None  # This is how we encode pruned questions
                 rationale = self.rationales_for_pruned.get(number)
+            elif is_pruned:
+                question = {"question": None}
+                question_upstream = {"question": None}
+                rationale = self.rationales_for_pruned.get(number)
 
             if number in metadata_json:
                 metadata = metadata_json[number]
@@ -243,13 +273,15 @@ class Build:
                 question_upstream = {"question": f"Frage {input} nicht gefunden"}
                 metadata = {"layout": "not-found", "picture_a": ""}
 
-            if metadata is None:
+            if metadata is None and not is_pruned:
                 tqdm.write(
                     f"\033[31mQuestion #{number} is missing"
                     + (" (Question not in metadata)" if metadata is None else "")
                     + "\033[0m"
                 )
                 # metadata = {"layout": "not-found", "picture_a": ""}
+                metadata = {"layout": "", "picture_a": ""}
+            elif metadata is None:
                 metadata = {"layout": "", "picture_a": ""}
 
             if "answer_a" in question:
@@ -341,7 +373,7 @@ class Build:
             if (self.config.p_data_pictures / f"{id}.txt").exists():
                 return (self.config.p_data_pictures / f"{id}.txt").read_text()
             else:
-                return "Bildbeschreibung noch nicht verfügbar"
+                return self.__ui("missing_description", "Bildbeschreibung noch nicht verfügbar")
         except FileNotFoundError:
             tqdm.write(f"\033[31mPicture #{id} not found\033[0m")
 
@@ -357,7 +389,7 @@ class Build:
             if (self.config.p_data_photos / f"{id}.txt").exists():
                 return (self.config.p_data_photos / f"{id}.txt").read_text()
             else:
-                return "Bildbeschreibung noch nicht verfügbar"
+                return self.__ui("missing_description", "Bildbeschreibung noch nicht verfügbar")
         except FileNotFoundError:
             tqdm.write(f"\033[31mPhoto #{id} not found\033[0m")
 
@@ -412,6 +444,7 @@ class Build:
                 picture_handler=self.__picture_handler,
                 photo_handler=self.__photo_handler,
                 include_handler=self.__include_handler,
+                ui_labels=self.ui_labels,
                 edition=edition,
                 chapter=chapter_num,
                 section=section_num,
@@ -462,6 +495,7 @@ class Build:
                 picture_handler=self.__picture_handler,
                 photo_handler=self.__photo_handler,
                 include_handler=self.__include_handler,
+                ui_labels=self.ui_labels,
                 edition=edition,
                 chapter=chapter_num,
                 section="0",  # Will be updated per section

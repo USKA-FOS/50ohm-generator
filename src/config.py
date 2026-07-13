@@ -14,6 +14,7 @@ class Config:
             self.config = {}
 
         self.p_data = Path(self.get_config_value("input", "content") if content_path is None else content_path)
+        self.language = self._detect_language(self.p_data)
 
         self.p_data_toc = self.p_data / "toc"
 
@@ -40,6 +41,9 @@ class Config:
 
         self.p_assets = Path("./assets")
         self.p_templates = Path("./templates")
+        self.p_generator_extra_content = self.p_data / "generator_extra_content"
+        self.p_generator_extra_content_default = self.p_generator_extra_content / "de"
+        self.p_generator_extra_content_language = self.p_generator_extra_content / self.language
 
     def get_config_value(self, key: str, default=None):
         if key in self.config:
@@ -53,3 +57,10 @@ class Config:
                 f"ERROR: Required value for '{key}' not found."
                 f"Add to config.json or env as '${self.__env_prefix}_{key.upper()}'"
             )
+
+    @staticmethod
+    def _detect_language(content_path: Path) -> str:
+        candidate = content_path.name.lower()
+        if candidate in {"de", "fr", "it"}:
+            return candidate
+        return "de"

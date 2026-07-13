@@ -55,11 +55,11 @@
         }, 3000);
       } else {
         var d = await r.json();
-        alert(d.detail || 'Fehler');
+        alert(d.detail || {{ ui('alert_error_json', '"Fehler"') }});
         btn.disabled = false;
       }
     } catch (e) {
-      alert('Verbindungsfehler');
+      alert({{ ui('alert_connection_error_json', '"Verbindungsfehler"') }});
       btn.disabled = false;
     }
   }
