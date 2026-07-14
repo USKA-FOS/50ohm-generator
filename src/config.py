@@ -13,7 +13,7 @@ class Config:
         else:
             self.config = {}
 
-        self.p_data = Path(self.get_config_value("input", "content") if content_path is None else content_path)
+        self.p_data = Path(self.get_config_value("input") if content_path is None else content_path)
         self.language = self._detect_language(self.p_data)
 
         self.p_data_toc = self.p_data / "toc"
