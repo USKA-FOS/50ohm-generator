@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_DIR="${SCRIPT_DIR}"
 PARENT_DIR="$(cd "${APP_DIR}/.." && pwd)"
 GENERATOR_CONFIG_DIR="${APP_DIR}/config"
-LOCAL_CONFIG_DIR="${PARENT_DIR}/config"
+LOCAL_CONFIG_DIR="${PARENT_DIR}/sites/app/config"
 SEED_ARG="${2:-}"
 
 build_one() {
