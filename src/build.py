@@ -143,6 +143,7 @@ class Navigation:
 class Build:
     def __init__(self, config: Config):
         self.config = config
+        self.random = random.Random(self.config.random_seed)
         self.ui_labels = self.__load_ui_labels()
         self.env = Environment(loader=self.__template_loader())
         self.env.filters["shuffle_answers"] = self.__filter_shuffle_answers
@@ -553,7 +554,7 @@ class Build:
                 firstrun = False
             else:
                 answers.append({"content": answer, "correct": False})
-        random.shuffle(answers)
+        self.random.shuffle(answers)
         return answers
 
     def __build_book_index(self, book):

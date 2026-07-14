@@ -57,6 +57,14 @@ Die 50ohm.de-Website wird mit folgendem Befehl vollständig gebaut:
 $ python3 ./build.py
 ```
 
+Für reproduzierbare Entwicklungs-Builds kann ein fixer Seed gesetzt werden,
+damit die zufällige Reihenfolge der Antworten in eingebetteten Fragen stabil
+bleibt:
+
+```console
+$ python3 ./build.py --seed 42
+```
+
 Anschließend ist der Einstiegspunkt in `build/index.html` zu finden.
 =======
 ### Starten

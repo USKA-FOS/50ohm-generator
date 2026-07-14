@@ -1,7 +1,18 @@
+import argparse
+
 import src.build as build
 import src.config as config
 
-conf = config.Config()
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--seed",
+    type=int,
+    default=None,
+    help="Deterministic seed for question-answer shuffling. Omit for non-deterministic builds.",
+)
+args = parser.parse_args()
+
+conf = config.Config(random_seed=args.seed)
 lang = conf.language
 
 course_titles = {

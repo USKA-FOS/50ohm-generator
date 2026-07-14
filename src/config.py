@@ -6,7 +6,7 @@ from pathlib import Path
 class Config:
     __env_prefix = "OHM"
 
-    def __init__(self, content_path: str = None, build_path: str = None):
+    def __init__(self, content_path: str = None, build_path: str = None, random_seed: int | None = None):
         if os.path.isfile("config/config.json"):
             with open("config/config.json") as file:
                 self.config = json.load(file)
@@ -44,6 +44,7 @@ class Config:
         self.p_generator_extra_content = self.p_data / "generator_extra_content"
         self.p_generator_extra_content_default = self.p_generator_extra_content / "de"
         self.p_generator_extra_content_language = self.p_generator_extra_content / self.language
+        self.random_seed = self._parse_random_seed(random_seed if random_seed is not None else self.config.get("random_seed"))
 
     def get_config_value(self, key: str, default=None):
         if key in self.config:
@@ -64,3 +65,9 @@ class Config:
         if candidate in {"de", "fr", "it"}:
             return candidate
         return "de"
+
+    @staticmethod
+    def _parse_random_seed(value) -> int | None:
+        if value in (None, ""):
+            return None
+        return int(value)
