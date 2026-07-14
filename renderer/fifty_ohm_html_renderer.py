@@ -286,7 +286,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             token.text,
             token.number,
             alt_text,
-        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", "Abbildung"))
+        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", ""))
 
     @staticmethod
     def render_photo_helper(id, ref, text, number, alt_text):
@@ -307,7 +307,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             token.text,
             token.number,
             alt_text,
-        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", "Abbildung"))
+        ).replace("{FIGURE_LABEL}", self.ui_labels.get("figure_label", ""))
 
     def render_table(self, token: Table):
         # Add id and name attributes if table has a name
@@ -321,7 +321,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             # Include hierarchical number in caption if available
             caption_text = token.caption
             if hasattr(token, "number") and token.number:
-                caption_text = f"{self.ui_labels.get('table_label', 'Tabelle')} {token.number}: {token.caption}"
+                caption_text = f"{self.ui_labels.get('table_label', '')} {token.number}: {token.caption}"
             table += f"<caption>{caption_text}</caption>\n"
 
         table += "</table>"

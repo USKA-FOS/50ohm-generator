@@ -11,19 +11,19 @@
   
           if (data.status === 'completed') {
             const date = new Date(data.timestamp * 1000).toLocaleString(undefined, { hour12: false });
-            el.textContent = `Last build:\n${date}`;
+            el.textContent = `{{ ui('generator_status_last_build') }}\n${date}`;
           } else if (data.status === 'running' || data.status === 'finalizing') {
             const elapsed = Math.floor(Date.now() / 1000 - data.timestamp);
             const dot = document.createElement('span');
             if (elapsed > 300) {
               const date = new Date(data.timestamp * 1000).toLocaleString(undefined, { hour12: false });
               dot.className = 'error-dot';
-              el.append('Generator crashed?\n', dot, ` ${date}`);
+              el.append('{{ ui('generator_status_crashed') }}\n', dot, ` ${date}`);
             } else {
               const mins = Math.floor(elapsed / 60);
               const secs = elapsed % 60;
               dot.className = 'dot';
-              const label = data.status === 'finalizing' ? 'Finalizing...' : 'Generator running:';
+              const label = data.status === 'finalizing' ? '{{ ui('generator_status_finalizing') }}' : '{{ ui('generator_status_running') }}';
               el.append(`${label}\n`, dot, ` ${mins}m ${secs}s`);
             }
           }

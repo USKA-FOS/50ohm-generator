@@ -52,8 +52,8 @@
           body: JSON.stringify({stage: sel.value}),
         });
         if (r.ok) { await reload(div, server, item); }
-        else { var d = await r.json(); alert(d.detail || {{ ui('alert_error_json', '"Fehler"') }}); btn.disabled = false; }
-      } catch (e) { alert({{ ui('alert_connection_error_json', '"Verbindungsfehler"') }}); btn.disabled = false; }
+        else { var d = await r.json(); alert(d.detail || {{ ui('alert_error_json') }}); btn.disabled = false; }
+      } catch (e) { alert({{ ui('alert_connection_error_json') }}); btn.disabled = false; }
     }
 
     async function changeStatus(div, server, item) {
@@ -67,8 +67,8 @@
           body: JSON.stringify({status: sel.value}),
         });
         if (r.ok) { await reload(div, server, item); }
-        else { var d = await r.json(); alert(d.detail || {{ ui('alert_error_json', '"Fehler"') }}); btn.disabled = false; }
-      } catch (e) { alert({{ ui('alert_connection_error_json', '"Verbindungsfehler"') }}); btn.disabled = false; }
+        else { var d = await r.json(); alert(d.detail || {{ ui('alert_error_json') }}); btn.disabled = false; }
+      } catch (e) { alert({{ ui('alert_connection_error_json') }}); btn.disabled = false; }
     }
 
     async function load() {

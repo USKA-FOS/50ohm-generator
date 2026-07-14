@@ -374,7 +374,7 @@ class Build:
             if (self.config.p_data_pictures / f"{id}.txt").exists():
                 return (self.config.p_data_pictures / f"{id}.txt").read_text()
             else:
-                return self.__ui("missing_description", "Bildbeschreibung noch nicht verfügbar")
+                return self.__ui("missing_description")
         except FileNotFoundError:
             tqdm.write(f"\033[31mPicture #{id} not found\033[0m")
 
@@ -390,7 +390,7 @@ class Build:
             if (self.config.p_data_photos / f"{id}.txt").exists():
                 return (self.config.p_data_photos / f"{id}.txt").read_text()
             else:
-                return self.__ui("missing_description", "Bildbeschreibung noch nicht verfügbar")
+                return self.__ui("missing_description")
         except FileNotFoundError:
             tqdm.write(f"\033[31mPhoto #{id} not found\033[0m")
 
@@ -702,6 +702,7 @@ class Build:
             picture_handler=self.__picture_handler,
             photo_handler=self.__photo_handler,
             include_handler=self.__include_handler,
+            ui_labels=self.ui_labels,
         ) as renderer:
             for key, value in snippets.items():
                 snippets[key] = renderer.render_inner(Document(value))
@@ -782,6 +783,7 @@ class Build:
                         picture_handler=self.__picture_handler,
                         photo_handler=self.__photo_handler,
                         include_handler=self.__include_handler,
+                        ui_labels=self.ui_labels,
                     ) as renderer:
                         question = self.__build_question(
                             solution_file.stem, template_file="html/solution_question.html"

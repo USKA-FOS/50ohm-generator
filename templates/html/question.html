@@ -3,9 +3,9 @@
     {% if question is not none and question_upstream is not none %}
     {{ number }}: {{ question | diff(question_upstream) }}
     {% elif question is none %}
-    <i><span class="diff removed">{{ number }} (gelöscht)</span>: {{ question_upstream }}</i>
+    <i><span class="diff removed">{{ number }} ({{ ui('question_deleted_label') }})</span>: {{ question_upstream }}</i>
     {% elif question_upstream is none %}
-    <i><span class="diff added">{{ number }} (neu)</span>: {{ question }}</i>
+    <i><span class="diff added">{{ number }} ({{ ui('question_new_label') }})</span>: {{ question }}</i>
     {% endif %}
   </div>
   {% if picture_question %}
@@ -30,17 +30,17 @@
   </div>
   {% if rationale is not none %}
   <div class="rationale">
-    <span class="highlight">Rationale:</span> {{ rationale }}
+    <span class="highlight">{{ ui('rationale_label') }}</span> {{ rationale }}
   </div>
   {% endif %}
 </div>
 <div class="solution" data-quiz-shown>
   {% if has_solution %}
-    <a class="btn btn-warning btn-sm d-inline-flex align-items-center" href="{{ number }}.html" aria-label="{{ ui('solution_aria_label_prefix', 'Lösungshinweis zu Frage ') }}{{ number }}" title="{{ ui('solution_title', 'Lösungshinweis') }}">
+    <a class="btn btn-warning btn-sm d-inline-flex align-items-center" href="{{ number }}.html" aria-label="{{ ui('solution_aria_label_prefix') }}{{ number }}" title="{{ ui('solution_title') }}">
       <svg class="solution-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" aria-hidden="true" focusable="false">
         <path d="M420.9 448C428.2 425.7 442.8 405.5 459.3 388.1C492 353.7 512 307.2 512 256C512 150 426 64 320 64C214 64 128 150 128 256C128 307.2 148 353.7 180.7 388.1C197.2 405.5 211.9 425.7 219.1 448L420.8 448zM416 496L224 496L224 512C224 556.2 259.8 592 304 592L336 592C380.2 592 416 556.2 416 512L416 496zM312 176C272.2 176 240 208.2 240 248C240 261.3 229.3 272 216 272C202.7 272 192 261.3 192 248C192 181.7 245.7 128 312 128C325.3 128 336 138.7 336 152C336 165.3 325.3 176 312 176z"/>
       </svg>
-      <span>{{ ui('solution_button_text', 'Lösungsweg anzeigen') }}</span>
+      <span>{{ ui('solution_button_text') }}</span>
     </a>
   {% endif %}
 </div>
