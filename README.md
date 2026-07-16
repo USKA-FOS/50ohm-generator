@@ -10,6 +10,7 @@
 - Direktes Rendering von Directus-Einheiten (siehe Issue #14)
 - Datum und Zeit der letzten Seitengenerierung bzw. Anzeige, wenn der Seitengenerator aktiv ist.
 - Neuer tag `<law>` für Verweise auf Gesetzestexte in der Marginalie (siehe Issue #27).
+- Links zwischen Seiten mit `[sec:xxx]`, `xxx` ist dabei der `ident` der section (umstritten, siehe Issue #28).
 
 Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
