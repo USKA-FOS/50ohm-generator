@@ -425,6 +425,7 @@ class Build:
                 chapter=chapter_num,
                 section=section_num,
                 section_url=section_filename,
+                navigation=self.navigation,
             ) as renderer:
                 # First pass: collect all figures and assign hierarchical numbers
                 doc = Document(section["content"])

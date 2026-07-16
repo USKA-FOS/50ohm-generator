@@ -42,6 +42,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         chapter=None,
         section=None,
         section_url=None,
+        navigation=None,
         **kwargs,
     ):
         super().__init__(
@@ -81,6 +82,9 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         self.edition = edition
         self.chapter = chapter
         self.section = section
+
+        # Navigation helper to find sections based on ident for links
+        self.navigation = navigation
 
         # Set section URL if provided, otherwise use default
         if section_url is not None:
