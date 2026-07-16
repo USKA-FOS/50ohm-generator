@@ -29,6 +29,11 @@ class Navigation:
         self.edition = edition
         self.chapters = toc["chapters"]
 
+        self.sections = {}
+        for chapter in self.chapters:
+            for section in chapter['sections']:
+                self.sections[section['ident']] = section
+
     def previous_chapter(self, chapter: dict) -> dict | None:
         """Determine previous chapter for navigation (None if this is the first chapter)."""
         index = self.chapters.index(chapter)
@@ -132,6 +137,10 @@ class Navigation:
             return self.__ident_to_section_url(next_section["ident"])
         else:
             return self.next_section_url(chapter, next_section)
+
+    def get_section(self, ident: str) -> dict | None:
+        """Return section from ident. Useful for e.g. linking section."""
+        return self.sections.get(ident)
 
     def __ident_to_chapter_url(self, ident):
         return f"{self.edition}_chapter_{ident}.html"
