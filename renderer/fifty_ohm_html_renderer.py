@@ -17,6 +17,7 @@ from .qso import Qso
 from .question import Question
 from .quote import Quote
 from .references import References
+from .section import Section
 from .table import Table, TableBody, TableCell, TableHeader, TableRow
 from .tag import Tag
 from .underline import Underline
@@ -42,6 +43,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         chapter=None,
         section=None,
         section_url=None,
+        navigation=None,
         **kwargs,
     ):
         super().__init__(
@@ -56,6 +58,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             NonbreakingSpaces,
             NonbreakingSpacesDots,
             References,
+            Section,
             Question,
             Picture,
             Photo,
@@ -81,6 +84,9 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         self.edition = edition
         self.chapter = chapter
         self.section = section
+
+        # Navigation helper to find sections based on ident for links
+        self.navigation = navigation
 
         # Set section URL if provided, otherwise use default
         if section_url is not None:
@@ -251,6 +257,16 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
             f'<a href="{self.section_url}#ref_{token.first}"'
             f" onclick=\"highlightRef('{token.first}');\">{figure_num}</a>"
         )
+
+    def render_section(self, token):
+        # Link to different section
+        section = self.navigation.get_section(token.first)
+        if section is None:
+            print(f'Error: [sec:{token.first}] not found.')
+            title = ' <i>NOT FOUND</i>'
+        else:
+            title = section.get('title')
+        return f'<a href="{self.edition}_{token.first}.html">{title}</a>'
 
     def render_question(self, token):
         return self.question_renderer(token.question_number)
