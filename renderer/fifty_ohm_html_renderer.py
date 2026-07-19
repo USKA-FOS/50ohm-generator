@@ -263,10 +263,10 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         section = self.navigation.get_section(token.first)
         if section is None:
             print(f'Error: [sec:{token.first}] not found.')
-            return '<span class="text-danger"><b>NOT FOUND</b></span>'
+            return '<span class="text-danger"><b>SECTION NOT FOUND</b></span>'
         if section['class'] not in self.edition:
             print(f'Error: [sec:{token.first}] missing from edition {self.edition}.')
-            return '<span class="text-danger"><b>SECTION NOT IN EDITION</b></span>'
+            return '<span class="text-danger"><b>SECTION NOT PART OF EDITION</b></span>'
 
         title = section.get('title')
         return f'<a href="{self.edition}_{token.first}.html">{title}</a>'
