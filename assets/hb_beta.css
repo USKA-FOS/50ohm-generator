@@ -89,3 +89,12 @@
   display:flex;
   align-items:center;
 }
+
+/* Links produced with [sec:...] pointing to extra-editional content is
+ * set with a dashed underline and the "not allowed" cursor for now.
+ */
+.cross-edition-link {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  cursor: not-allowed;
+}
