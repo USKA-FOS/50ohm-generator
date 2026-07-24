@@ -264,9 +264,9 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         if section is None:
             print(f'Error: [sec:{token.first}] not found.')
             return '<span class="text-danger"><b>SECTION NOT FOUND</b></span>'
+        # FIXME: figure out how to deal with extra-editional links.
         if section['class'] not in self.edition:
-            print(f'Error: [sec:{token.first}] missing from edition {self.edition}.')
-            return '<span class="text-danger"><b>SECTION NOT PART OF EDITION</b></span>'
+            return f'<span class="cross-edition-link">{section.get('title')}</span>'
 
         title = section.get('title')
         return f'<a href="{self.edition}_{token.first}.html">{title}</a>'
