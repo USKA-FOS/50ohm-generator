@@ -188,6 +188,15 @@ class Build:
     def __ui(self, key: str, default: str = "") -> str:
         return str(self.ui_labels.get(key, default))
 
+    def __rationale_text(self, value):
+        if value is None:
+            return None
+        if isinstance(value, list):
+            cleaned = [str(item).strip() for item in value if str(item).strip()]
+            return "; ".join(cleaned) if cleaned else None
+        text = str(value).strip()
+        return text or None
+
     def __parse_katalog(self, path: Path):
         with path.open() as file:
 #           fragenkatalog = json.load(file)  # FIXME::revert after beta
@@ -243,7 +252,7 @@ class Build:
 
             if number in self.questions:
                 question = self.questions[number]
-                rationale = question['HB.rationale']
+                rationale = self.__rationale_text(question.get('HB.rationale'))
                 # FIXME: Remove after beta
                 if number in self.questions_upstream:
                     question_upstream = self.questions_upstream[number]
@@ -255,11 +264,11 @@ class Build:
                 question_upstream = self.questions_upstream[number]
                 question = question_upstream.copy()
                 question['question'] = None  # This is how we encode pruned questions
-                rationale = self.rationales_for_pruned.get(number)
+                rationale = self.__rationale_text(self.rationales_for_pruned.get(number))
             elif is_pruned:
                 question = {"question": None}
                 question_upstream = {"question": None}
-                rationale = self.rationales_for_pruned.get(number)
+                rationale = self.__rationale_text(self.rationales_for_pruned.get(number))
 
             if number in metadata_json:
                 metadata = metadata_json[number]
