@@ -44,7 +44,11 @@ class Config:
         self.p_generator_extra_content = self.p_data / "generator_extra_content"
         self.p_generator_extra_content_default = self.p_generator_extra_content / "de"
         self.p_generator_extra_content_language = self.p_generator_extra_content / self.language
-        self.random_seed = self._parse_random_seed(random_seed if random_seed is not None else self.config.get("random_seed"))
+        configured_seed = random_seed if random_seed is not None else self.config.get("random_seed")
+        self.random_seed = self._parse_random_seed(configured_seed)
+        self.release_id = self._optional_config_value("release_id")
+        self.beta = self._parse_bool(self._optional_config_value("beta", False))
+        self.feedback_url = self._optional_config_value("feedback_url")
 
     def get_config_value(self, key: str, default=None):
         if key in self.config:
@@ -59,6 +63,11 @@ class Config:
                 f"Add to config.json or env as '${self.__env_prefix}_{key.upper()}'"
             )
 
+    def _optional_config_value(self, key: str, default=None):
+        if key in self.config:
+            return self.config[key]
+        return os.environ.get(f"{self.__env_prefix}_{key.upper()}", default)
+
     @staticmethod
     def _detect_language(content_path: Path) -> str:
         candidate = content_path.name.lower()
@@ -71,3 +80,16 @@ class Config:
         if value in (None, ""):
             return None
         return int(value)
+
+    @staticmethod
+    def _parse_bool(value) -> bool:
+        if isinstance(value, bool):
+            return value
+        if value in (None, ""):
+            return False
+        normalized = str(value).strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+        raise ValueError(f"Invalid boolean value: {value!r}")

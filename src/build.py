@@ -150,6 +150,9 @@ class Build:
         self.env.filters["diff"] = diff_filter  # FIXME: remove after beta
         self.env.globals["ui"] = self.__ui
         self.env.globals["lang"] = self.config.language
+        self.env.globals["release_id"] = self.config.release_id
+        self.env.globals["beta"] = self.config.beta
+        self.env.globals["feedback_url"] = self.config.feedback_url
         self.questions, self.rationales_for_pruned = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta

@@ -25,6 +25,9 @@
 </head>
 
 <body>
+    {% if release_id %}
+        {% include "slide/release-overlay.html" %}
+    {% endif %}
     <div class="reveal">
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">

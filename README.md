@@ -12,6 +12,21 @@
 
 Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
+## Release-Konfiguration
+
+Der Generator liest die optionalen Werte `release_id`, `beta` und
+`feedback_url` aus `config/config.json` oder den entsprechenden
+Umgebungsvariablen `OHM_RELEASE_ID`, `OHM_BETA` und `OHM_FEEDBACK_URL`.
+Normalerweise werden sie durch den mehrsprachigen Build-Wrapper aus
+`50ohm-contents-ch` gesetzt und nicht manuell konfiguriert.
+
+Ohne `release_id` bleibt die Ausgabe unverändert. Mit `release_id` zeigt jede
+Seite die Release-Kennung und den lokalisierten Feedback-Link. Wenn zusätzlich
+`beta` wahr ist, erscheint der lokalisierte Beta-Hinweis. Die sichtbaren Texte
+und Fragmente stammen aus `generator_extra_content/{de,fr,it}` des
+Content-Repositorys; im Generator liegen nur Konfigurations- und
+Einbindungslogik.
+
 ## Überblick
 
 Die Ausbildungsmaterialien für die Plattform werden in einem erweiterten Markdownformat geschrieben, intern als DARCdown bezeichnet. Kern des Generators ist ein Parser, der auf [mistletoe](https://github.com/miyuchina/mistletoe) basiert und um zusätzliche Syntax und Ausgabeformate erweitert wurde.
