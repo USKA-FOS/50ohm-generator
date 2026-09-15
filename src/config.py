@@ -49,6 +49,8 @@ class Config:
         self.release_id = self._optional_config_value("release_id")
         self.beta = self._parse_bool(self._optional_config_value("beta", False))
         self.feedback_url = self._optional_config_value("feedback_url")
+        # External wrappers may enable the optional live generator status widget.
+        self.generator_status = self._parse_bool(self._optional_config_value("generator_status", True))
 
     def get_config_value(self, key: str, default=None):
         if key in self.config:

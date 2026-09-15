@@ -52,9 +52,10 @@ und Fragmente stammen aus `generator_extra_content/{de,fr,it}` des
 Content-Repositorys; im Generator liegen nur Konfigurations- und
 Einbindungslogik.
 
-Jeder erfolgreiche Build erzeugt im Ausgabeordner `generator_status.json`.
-Die statische Statusanzeige behandelt eine fehlende oder nicht erreichbare
-Datei als optional und meldet deshalb keinen ungefangenen JSON-Fehler.
+Der optionale Status-Widget ist standardmassig aktiviert, wenn ein anderer
+Wrapper den Wert `generator_status` nicht angibt. Ein Wrapper, der statische
+Releases offline baut, kann ihn auf `false` setzen; dann werden das Widget und
+seine Abfragen nicht in die Ausgabe aufgenommen.
 
 ## Überblick
 
