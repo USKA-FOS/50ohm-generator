@@ -117,6 +117,70 @@ h1, h2, h3, h4, h5, h6 {
   background: #212529;
 }
 
+.header-language-controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+}
+
+.header-beta-slot {
+  grid-column: 2;
+}
+
+.header-beta-warning {
+  position: relative;
+  color: #ffda6a;
+}
+
+.header-beta-warning summary {
+  list-style: none;
+}
+
+.header-beta-warning summary::-webkit-details-marker {
+  display: none;
+}
+
+.header-beta-disclaimer {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(26rem, calc(100vw - 24px));
+  padding: 14px;
+  color: #332701;
+  background: #fff3cd;
+  border: 1px solid #ffda6a;
+  border-radius: 6px;
+}
+
+.header-languages {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+}
+
+.header-languages a {
+  padding: 3px 6px;
+  color: #fff;
+  border: 1px solid #70777e;
+  text-decoration: none;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.header-languages a + a {
+  border-left: 0;
+}
+
+.header-languages a:hover,
+.header-languages a[aria-current] {
+  color: #212529;
+  background: #ffda6a;
+}
+
 .fiftyohm-layout-outer-content {
     margin-top: 50px;
   }

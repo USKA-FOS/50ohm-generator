@@ -33,8 +33,8 @@ def test_release_inclusion_points_are_conditional() -> None:
     page = (GENERATOR_ROOT / "templates/html/page.html").read_text(encoding="utf-8")
     slide = (GENERATOR_ROOT / "templates/slide/slide.html").read_text(encoding="utf-8")
 
-    assert '{% if release_id and beta %}' in page
-    assert '{% include "html/release-beta-warning.html" %}' in page
+    assert '{% include "html/header-language-controls.html" %}' in page
+    assert 'assets/language-switch.js' in page
     assert '{% if release_id %}' in page
     assert '{% include "html/release-footer.html" %}' in page
     assert '{% if release_id %}' in slide

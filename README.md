@@ -14,6 +14,21 @@ Dieses Repository enthält den Generator für die Webseite, der mit einem andern
 
 ## Release-Konfiguration
 
+Die regulare Kopfzeile zeigt DE/FR/IT rechts und den optionalen BETA-Hinweis
+zentriert in einer kompakten eigenen Zeile. Sprachwechsel behalten Seitenname,
+Deployment-Prafix, Query und Anker bei; die Scrollposition wird im selben Tab
+nach dem Laden wiederhergestellt. Bei unterschiedlicher Textlange ist derselbe
+Pixelversatz nicht unbedingt derselbe Absatz. Ohne Browser-Speicher funktioniert
+der Sprachlink weiterhin, aber ohne Scrollwiederherstellung. Die Zielseite muss
+in allen drei veroffentlichten Sprachbaumen vorhanden sein.
+
+Tests (im Generator-Repository, read-only ausser Test-Caches):
+
+```bash
+python -m pytest -q test/test_release_presentation.py
+node --test test/language-switch.test.cjs
+```
+
 Der Generator liest die optionalen Werte `release_id`, `beta` und
 `feedback_url` aus `config/config.json` oder den entsprechenden
 Umgebungsvariablen `OHM_RELEASE_ID`, `OHM_BETA` und `OHM_FEEDBACK_URL`.

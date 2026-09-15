@@ -17,6 +17,7 @@
     <script defer src="assets/katex/auto-render.min.js"></script>
     <script defer src="assets/latex.js"></script>  
     <script defer src="assets/script.js"></script>  
+    <script defer src="assets/language-switch.js"></script>
     <style>
       .course .margin.tip:before {
         content: "{{ ui('margin_tip_label') }}";
@@ -53,6 +54,7 @@
   <body>
 
     <div class="fiftyohm-layout-outer fiftyohm-layout-outer-head">
+      {% include "html/header-language-controls.html" %}
       <div class="fiftyohm-layout-inner">
         <div class="fiftyohm-layout-left">
           <a class="fiftyohm-brand" href="index.html">
@@ -109,9 +111,6 @@
           </ul>
         </div>
         <div class="fiftyohm-layout-right">
-          {% if release_id and beta %}
-            {% include "html/release-beta-warning.html" %}
-          {% endif %}
         </div>
       </div>
     </div>
