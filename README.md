@@ -15,12 +15,22 @@ Dieses Repository enthält den Generator für die Webseite, der mit einem andern
 ## Release-Konfiguration
 
 Die regulare Kopfzeile zeigt DE/FR/IT rechts und den optionalen BETA-Hinweis
-zentriert in einer kompakten eigenen Zeile. Sprachwechsel behalten Seitenname,
+zwischen Logo und Navigation in derselben bestehenden Zeile. BETA und
+Sprachbuttons sind vertikal an den Menusymbolen ausgerichtet; die Kopfzeile
+wird nicht hoher. Auf schmalen Mobilbildschirmen entfallt die Logo-Unterzeile,
+damit alle Bedienelemente ohne Uberlappung in dieselbe Zeile passen.
+Sprachwechsel behalten Seitenname,
 Deployment-Prafix, Query und Anker bei; die Scrollposition wird im selben Tab
 nach dem Laden wiederhergestellt. Bei unterschiedlicher Textlange ist derselbe
 Pixelversatz nicht unbedingt derselbe Absatz. Ohne Browser-Speicher funktioniert
 der Sprachlink weiterhin, aber ohne Scrollwiederherstellung. Die Zielseite muss
 in allen drei veroffentlichten Sprachbaumen vorhanden sein.
+
+Im Seitenfuss steht die Release-Kennung uber dem Feedback-Button am rechten
+Rand der vorhandenen Trennlinie. Beide bilden einen Block, dessen vertikale
+Mitte an der USKA-Angebotszeile ausgerichtet ist. Auf Mobilbildschirmen werden
+die Fussbereiche ohne Uberlappung untereinander angeordnet; der Release-Block
+bleibt rechtsbundig. Texte und Feedback-Kontext bleiben unverandert.
 
 Tests (im Generator-Repository, read-only ausser Test-Caches):
 
