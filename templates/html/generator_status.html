@@ -27,6 +27,9 @@
               el.append(`${label}\n`, dot, ` ${mins}m ${secs}s`);
             }
           }
+        })
+        .catch(() => {
+          // Status is optional on static releases; do not surface a fetch error.
         });
     }
   

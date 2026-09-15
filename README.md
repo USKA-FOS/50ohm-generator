@@ -52,6 +52,10 @@ und Fragmente stammen aus `generator_extra_content/{de,fr,it}` des
 Content-Repositorys; im Generator liegen nur Konfigurations- und
 Einbindungslogik.
 
+Jeder erfolgreiche Build erzeugt im Ausgabeordner `generator_status.json`.
+Die statische Statusanzeige behandelt eine fehlende oder nicht erreichbare
+Datei als optional und meldet deshalb keinen ungefangenen JSON-Fehler.
+
 ## Überblick
 
 Die Ausbildungsmaterialien für die Plattform werden in einem erweiterten Markdownformat geschrieben, intern als DARCdown bezeichnet. Kern des Generators ist ein Parser, der auf [mistletoe](https://github.com/miyuchina/mistletoe) basiert und um zusätzliche Syntax und Ausgabeformate erweitert wurde.
