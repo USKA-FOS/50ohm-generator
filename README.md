@@ -79,18 +79,16 @@ Bei Anfragen zur Helvetisierung bitte die Email-Adresse [50ohm@uska.ch](mailto:5
 
 Dieses Projekt wurde mit [`uv`](https://docs.astral.sh/uv/) aufgesetzt, ist aber genauso mit `pip` und `venv` kompatibel.
 
-Wichtig ist, mit der richtigen Python-Version aus der `.python-version` zu arbeiten. Mit `uv` geht das ganz einfach:
-```console
-$ uv venv
-Using CPython 3.12.7
-Creating virtual environment at .venv
-$ source .venv/bin/activate
+Python 3.14 ist die Projektversion in `.python-version` und im Docker-Image.
+Die gesperrten Abhängigkeiten einschließlich pytest werden mit `uv` installiert:
+```bash
+uv sync --locked
+uv run --locked python -m pytest -q test
 ```
 
-Die Dependencies müssen aus der `requirements.txt` installiert werden:
-```console
-$ uv pip sync requirements.txt
-```
+Diese Tests bauen keine vollständige Website und kompilieren keine TeX-Dateien.
+`requirements.txt` ist der abgeleitete Export für das Docker-Image; die
+Entwicklungsumgebung verwendet `pyproject.toml` und `uv.lock`.
 
 ### Ausführen
 

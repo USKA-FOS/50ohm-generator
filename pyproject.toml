@@ -3,7 +3,7 @@ name = "50ohm-de"
 version = "0.1.0"
 description = "Generator für 50ohm.de, die Ausbildungsplattform des DARC e.V."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "jinja2==3.1.6",
     "mistletoe==1.4.0",
