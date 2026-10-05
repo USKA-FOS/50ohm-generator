@@ -19,6 +19,7 @@ captures = [
     "webonly",
     "latexonly",
     "wordorigin",
+    "law",
     # Slides:
     "note",
     "fragment",
