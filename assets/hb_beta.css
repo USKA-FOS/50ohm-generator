@@ -98,3 +98,19 @@
   text-decoration-style: dashed;
   cursor: not-allowed;
 }
+
+/* Badges to highlight HB3/HB9 class in title, ToC etc. */
+.badge.HB3 {
+    background-color: rgb(82,156,194);
+    color: #fff;
+}
+
+.badge.HB9 {
+    background-color: rgb(223,137,18);
+    color: #fff;
+}
+
+h1 .badge {
+    font-size: 30%;
+    margin-left: 10px;
+}

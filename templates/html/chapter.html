@@ -25,7 +25,7 @@
 <div class="chapter-toc d-grid gap-2">
     {% for section in chapter["sections"] %}
         <a class="btn btn-outline-primary btn-labeled {%if section.disabled %}disabled{% endif %}" href="{{ edition }}_{{ section["ident"] }}.html">
-          <span class="btn-label">{{ number }}.{{loop.index}}</span>{{ section["title"]}}{% if section.disabled %} ({{disabled_label}}){% endif %}
+          <span class="btn-label">{{ number }}.{{loop.index}}</span>{{ section["title"]}} <span class="badge {{class_map[section["class"]]}}">{{class_map[section["class"]]}}</span>
         </a>
     {% endfor %}
 </div>
