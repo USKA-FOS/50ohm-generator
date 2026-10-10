@@ -446,7 +446,8 @@ class Build:
                     previous_section_url=self.navigation.previous_section_url(chapter, section),
                     next_section_url=self.navigation.next_section_url(chapter, section),
                     repo=self.config.get_config_value('repo_base_url'),
-                    markdown=self.navigation.this_section_markdown(section)
+                    markdown=self.navigation.this_section_markdown(section),
+                    class_map=self.class_map
                 )
 
                 result = self.__build_page(result, course_wrapper=True)

@@ -109,3 +109,8 @@
     background-color: rgb(223,137,18);
     color: #fff;
 }
+
+h1 .badge {
+    font-size: 30%;
+    margin-left: 10px;
+}
