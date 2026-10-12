@@ -37,17 +37,29 @@ bleibt rechtsbundig. Texte und Feedback-Kontext bleiben unverandert.
 Tests (im Generator-Repository, read-only ausser Test-Caches):
 
 ```bash
-python -m pytest -q test/test_release_presentation.py
+uv run --locked python -m pytest -q test/test_release_presentation.py
 node --test test/language-switch.test.cjs
+node --test test/latex-unit-macros.test.cjs
 ```
+
+`assets/latex.js` definiert die KaTeX-Makros für die Webdarstellung von
+`\qty` und `\unit`. Es enthält auch `\gram`, `\minute` und `\farad`.
+dBm wird mit `\text{dBm}` geschrieben. Einheitenbefehle in kanonischen
+Texten dürfen nicht in die Zielsprache übersetzt werden.
 
 Der Generator liest die optionalen Werte `release_id`, `beta` und
 `feedback_url` aus `config/config.json` oder den entsprechenden
 Umgebungsvariablen `OHM_RELEASE_ID`, `OHM_BETA` und `OHM_FEEDBACK_URL`.
+`review_workflow` (oder `OHM_REVIEW_WORKFLOW`) ist standardmäßig `false`.
+Nur bei `true` werden die Kapitel-/Abschnittswidgets, der zugehörige
+GitHub-Bearbeiten-Button sowie der deutschsprachige Worktree-Vergleichsbutton
+und `diff.html` erzeugt. Der mehrsprachige Build-Wrapper setzt dies
+nur mit `--enable-review-workflow`; das bestehende Backend verwaltet keine
+getrennten Zustände für DE/FR/IT.
 Normalerweise werden sie durch den mehrsprachigen Build-Wrapper aus
 `50ohm-contents-ch` gesetzt und nicht manuell konfiguriert.
 
-Ohne `release_id` bleibt die Ausgabe unverändert. Mit `release_id` zeigt jede
+Ohne `release_id` erscheinen keine release-spezifischen Elemente. Mit `release_id` zeigt jede
 Seite die Release-Kennung und den lokalisierten Feedback-Link. Wenn zusätzlich
 `beta` wahr ist, erscheint der lokalisierte Beta-Hinweis. Die sichtbaren Texte
 und Fragmente stammen aus `generator_extra_content/{de,fr,it}` des

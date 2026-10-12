@@ -162,6 +162,7 @@ class Build:
         self.env.globals["release_id"] = self.config.release_id
         self.env.globals["beta"] = self.config.beta
         self.env.globals["feedback_url"] = self.config.feedback_url
+        self.env.globals["review_workflow"] = self.config.review_workflow
         self.questions, self.rationales_for_pruned = self.__parse_katalog(self.config.p_data_fragenkatalog)
 
         # FIXME:Revert after beta
@@ -790,7 +791,8 @@ class Build:
         self.__build_course_page(snippets, "kurse-liste", "kurse_vor_ort_liste")
         self.__build_course_page(snippets, "patenkarte", "patenkarte")
         self.__build_course_page(snippets, "todo", "todo")
-        self.__build_course_page(snippets, "diff", "diff")
+        if self.config.review_workflow:
+            self.__build_course_page(snippets, "diff", "diff")
         self.__build_html_page(contents, "pruefung")
         self.__build_html_page(contents, "infos")
         self.__build_html_page(contents, "suche")

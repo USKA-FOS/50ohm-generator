@@ -51,6 +51,7 @@ class Config:
         self.feedback_url = self._optional_config_value("feedback_url")
         # External wrappers may enable the optional live generator status widget.
         self.generator_status = self._parse_bool(self._optional_config_value("generator_status", True))
+        self.review_workflow = self._parse_bool(self._optional_config_value("review_workflow", False))
 
     def get_config_value(self, key: str, default=None):
         if key in self.config:

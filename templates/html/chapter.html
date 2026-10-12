@@ -9,7 +9,9 @@
   </div>
 </div>
 
-{% include "html/chapter-review-widget.html" %}
+{% if review_workflow %}
+  {% include "html/chapter-review-widget.html" %}
+{% endif %}
 
 <nav aria-label="breadcrumb">
 {# TODO: Add after review? <nav aria-label="breadcrumb" data-quiz-shown> #}

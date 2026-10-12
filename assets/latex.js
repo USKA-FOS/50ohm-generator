@@ -112,6 +112,8 @@ document.addEventListener("DOMContentLoaded", function() {
         "\\pico": "\\text{p}",
         "\\kilogram": "\\text{kg}",
         "\\gram": "\\text{g}",
+        "\\minute": "\\text{min}",
+        "\\farad": "\\text{F}",
         "\\meter": "\\text{m}",
         "\\second": "\\text{s}",
         "\\hour": "\\text{h}",

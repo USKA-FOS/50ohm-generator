@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import pytest
+from jinja2 import Environment, FileSystemLoader
 
 from src.config import Config
 
@@ -23,6 +24,7 @@ def test_release_configuration_defaults_to_inactive(tmp_path: Path, monkeypatch:
     assert config.beta is False
     assert config.feedback_url is None
     assert config.generator_status is True
+    assert config.review_workflow is False
 
 
 def test_release_configuration_rejects_invalid_boolean() -> None:
@@ -44,3 +46,22 @@ def test_release_inclusion_points_are_conditional() -> None:
     assert '{% include "html/release-footer.html" %}' in page
     assert '{% if release_id %}' in slide
     assert '{% include "slide/release-overlay.html" %}' in slide
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_review_controls_are_explicitly_enabled(enabled: bool) -> None:
+    env = Environment(loader=FileSystemLoader(GENERATOR_ROOT / "templates"))
+    env.globals.update(ui=lambda key: '"Message"', review_workflow=enabled)
+    common = {
+        "edition": "HB", "name": "Course", "number": 1,
+        "chapter": {"ident": "chapter", "title": "Chapter", "abstract": "", "sections": [], "video_url": None},
+        "section": {"ident": "section", "title": "Section", "content": "Content", "video_url": None},
+        "section_id": 1, "markdown": "section.md", "repo": "https://example.invalid/repo",
+    }
+    chapter = env.get_template("html/chapter.html").render(**common)
+    section = env.get_template("html/section.html").render(**common)
+
+    assert ("/review_workflow/api/chapter-widget/" in chapter) is enabled
+    assert ("/review_workflow/api/widget/" in section) is enabled
+    assert ('id="github-edit-button"' in section) is enabled
+    assert ('href="diff.html?file=section.md"' in section) is enabled
