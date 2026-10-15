@@ -29,7 +29,10 @@ class Config:
         self.p_data_solutions = self.p_data_contents / "solutions"
 
         self.p_data_fragenkatalog = self.p_data_questions / self.get_config_value("questions", "fragenkatalog3b.json")
-        self.p_data_fragenkatalog_upstream = self.p_data_questions / self.get_config_value("questions_upstream")
+        if self.get_config_value("questions_upstream") is not None:
+            self.p_data_fragenkatalog_upstream = self.p_data_questions / self.get_config_value("questions_upstream")
+        else:
+            self.p_data_fragenkatalog_upstream = None
 
         self.p_data_metadata = self.p_data_questions / "metadata3b.json"
 

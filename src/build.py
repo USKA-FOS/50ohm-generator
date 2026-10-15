@@ -225,7 +225,7 @@ class Build:
 
             if number in self.questions:
                 question = self.questions[number]
-                rationale = question['HB.rationale']
+                rationale = question.get('HB.rationale', None)
                 # FIXME: Remove after beta
                 if number in self.questions_upstream:
                     question_upstream = self.questions_upstream[number]
