@@ -78,3 +78,16 @@ def test_class_latex():
     target = "\nIch lerne für Klasse~A, Klasse~E und Klasse~N.\n"
 
     assert mistletoe.markdown(input, FiftyOhmLaTeXRenderer) == target
+
+
+@pytest.mark.parametrize("space,html_space,latex_space", [
+    ("\u00a0", "&#160;", "~"),
+    ("\u202f", "&#8239;", r"\,"),
+])
+@pytest.mark.parametrize("before,after", [(True, False), (False, True), (True, True)])
+def test_unicode_nonbreaking_spaces_around_ellipsis(space, html_space, latex_space, before, after):
+    text = "«" + (space if before else "") + "..." + (space if after else "") + "»"
+    html = "«" + (html_space if before else "") + "..." + (html_space if after else "") + "»"
+    latex = "«" + (latex_space if before else "") + "..." + (latex_space if after else "") + "»"
+    assert mistletoe.markdown(text, FiftyOhmHtmlRenderer) == paragraph(html)
+    assert mistletoe.markdown(text, FiftyOhmLaTeXRenderer) == "\n" + latex + "\n"

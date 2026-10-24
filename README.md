@@ -47,6 +47,16 @@ node --test test/latex-unit-macros.test.cjs
 dBm wird mit `\text{dBm}` geschrieben. Einheitenbefehle in kanonischen
 Texten dürfen nicht in die Zielsprache übersetzt werden.
 
+Die DARCdown-Auslassungspunkte `...` akzeptieren bereits geschützte Unicode-
+Leerzeichen. Der Renderer verarbeitet U+00A0 als geschütztes Leerzeichen und
+U+202F als schmales geschütztes Leerzeichen, auch unmittelbar vor einem
+schliessenden französischen Guillemets. HTML verwendet `&#160;` bzw. `&#8239;`,
+LaTeX `~` bzw. `\,`. Die Eingabetexte werden dafür nicht umgeschrieben.
+
+```bash
+uv run --locked python -m pytest -q test/test_nonbreaking_spaces.py
+```
+
 Der Generator liest die optionalen Werte `release_id`, `beta` und
 `feedback_url` aus `config/config.json` oder den entsprechenden
 Umgebungsvariablen `OHM_RELEASE_ID`, `OHM_BETA` und `OHM_FEEDBACK_URL`.

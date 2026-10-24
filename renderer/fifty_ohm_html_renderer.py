@@ -214,8 +214,8 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         return f"{token.first}&#160;{token.second}"
 
     def render_nonbreaking_spaces_dots(self, token):
-        lookup = {"": "", " ": "&#160;"}
-        return f"{lookup[token.first]}{token.second}{lookup[token.third]}"
+        lookup = {"": "", "\u202f": "&#8239;"}
+        return f"{lookup.get(token.first, '&#160;')}{token.second}{lookup.get(token.third, '&#160;')}"
 
     def collect_figures(self, document):
         """First pass: collect all figures and assign hierarchical numbers."""

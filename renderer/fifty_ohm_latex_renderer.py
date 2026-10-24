@@ -103,8 +103,8 @@ class FiftyOhmLaTeXRenderer(LaTeXRenderer):
         return f"{token.first}~{token.second}"
 
     def render_nonbreaking_spaces_dots(self, token):
-        lookup = {"": "", " ": "~"}
-        return f"{lookup[token.first]}{token.second}{lookup[token.third]}"
+        lookup = {"": "", "\u202f": r"\,"}
+        return f"{lookup.get(token.first, '~')}{token.second}{lookup.get(token.third, '~')}"
 
     def render_question(self, token):
         return self.question_renderer(token.question_number)
