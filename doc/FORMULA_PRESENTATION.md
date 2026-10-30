@@ -1,6 +1,7 @@
 # Deterministic HTML formula presentation
 
-Status: approved approach, normal-generator integration; no site release rebuilt.
+Status: normal-generator integration, validated in isolated previews and tests.
+Published builds record their actual source commits in the release manifest.
 Recovery baseline: generator `c5900b0` (clean and published before this work).
 
 ## Problem and scope
@@ -155,7 +156,10 @@ code/prose, real markup splits and real unclosed delimiters, frozen Before
 assets, escaped dollars, punctuation/connector/body preservation, multiline
 paragraphs and slide opt-out. JavaScript checks exercise the bundled KaTeX,
 variable/unit styles and separation of display and inline passes. Integration
-checks must also exercise the real page template/asset loader in DE/FR/IT.
+checks exercise the real page template/asset loader in DE/FR/IT. The relevant
+CSS/JavaScript references use `formula-layout-1` to invalidate stale browser
+copies. Malformed legacy formulas retain their previous representation rather
+than aborting rendering.
 No complete website or PDF build is needed for these checks.
 
 References: [display mode](https://katex.org/docs/options.html),

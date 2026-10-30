@@ -7,6 +7,7 @@ class FiftyOhmHtmlSlideRenderer(FiftyOhmHtmlRenderer):
     def __init__(self, **kwargs):
         super().__init__(
             SlideBreak,
+            formula_layout=False,
             **kwargs,
         )
 

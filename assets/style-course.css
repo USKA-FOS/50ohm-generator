@@ -430,19 +430,19 @@ span.formula {
 }
 
 .answers button:nth-child(1):before {
-  content: "A:";
+  content: "A:\00a0";
 }
 
 .answers button:nth-child(2):before {
-  content: "B:";
+  content: "B:\00a0";
 }
 
 .answers button:nth-child(3):before {
-  content: "C:";
+  content: "C:\00a0";
 }
 
 .answers button:nth-child(4):before {
-  content: "D:";
+  content: "D:\00a0";
 }
 
 /* Enable Line Breaks in Equations ... */
@@ -460,27 +460,53 @@ span.formula {
   margin: 1em 0em;
 }
 
-/* Render bold katex in question heads */
-div.question-text {
-  .katex {
-    font-weight: 600;
-  }
+/* Contextual math: keep the engine's font metrics and local text sizing.
+   Inline sans fonts are selected with native KaTeX commands in formula-inline.js.
+   Never force Inter/generic sans onto the engine's internal glyph spans. */
+html[data-formula-presentation="contextual"] .course .katex {
+  font-size: 1em;
 }
-
-/* katex default is 1.21em serif font. Reduce and enforce sans outside of math blocks */
-p, div.question, ul, ol {
-  .katex {
-    font-family: sans-serif;
-    font-size: 1.0rem;
-  }
-  .katex .mathnormal {
-    font-family: sans-serif;
-  }
-  .katex .accent-body {
-    font-family: Katex_Main;
-  }
+html[data-formula-presentation="contextual"] .course .katex-display > .katex {
+  font-size: 1.1em;
 }
-
+/* Display equations are atomic: do not wrap between KaTeX .base segments
+   (notably at relation signs). Use the full line and scroll only if wider. */
+html[data-formula-presentation="contextual"] .course .katex-display > .katex {
+  white-space: nowrap;
+}
+.formula-block {
+  display: flex;
+  align-items: baseline;
+  justify-content: safe center;
+  flex-wrap: nowrap;
+  gap: .4em;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 1em 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .35em 0;
+}
+.formula-block > .formula-item {
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: baseline;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.formula-block[data-formula-rule="explicit_display_sequence"] { display: block; }
+.formula-block[data-formula-rule="explicit_display_sequence"] > .formula-item {
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  min-width: 100%;
+  margin: .5em 0;
+}
+.course .formula-block .katex-display { margin: 0; }
+.course .formula-block .katex-display .base { margin: 0; }
 
 /* Quiz-Modus */
 body[data-quiz-mode][data-quiz-has-questions] .course > * {

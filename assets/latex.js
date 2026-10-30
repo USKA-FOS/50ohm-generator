@@ -187,15 +187,34 @@ document.addEventListener("DOMContentLoaded", function() {
         "\\symup": "\\text{#1}",
     };
 
-    renderMathInElement(document.body, {
-        delimiters: [
-            { left: '$$', right: '$$', display: true }, // Note: $$ has to come before $
-            { left: '$', right: '$', display: false },
-            { left: '\\[', right: '\\]', display: true },
-            { left: "\\(", right: "\\)", display: false },
-        ],
-        throwOnError: false,
-        macros: macros
-    });
+    const contextual = document.documentElement?.dataset?.formulaPresentation === "contextual"
+        && typeof OhmInlineMath !== "undefined";
+    const displayDelimiters = [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\[', right: '\\]', display: true },
+    ];
+    const inlineDelimiters = [
+        { left: '$', right: '$', display: false },
+        { left: '\\(', right: '\\)', display: false },
+    ];
+    if (contextual) {
+        // First consume all display math, then process only the remaining inline
+        // text. Never reprocess generated HTML/MathML or alter display formulas.
+        renderMathInElement(document.body, {
+            delimiters: displayDelimiters, throwOnError: false, macros,
+            ignoredClasses: ["katex"],
+        });
+        renderMathInElement(document.body, {
+            delimiters: inlineDelimiters, throwOnError: false,
+            macros: OhmInlineMath.inlineMacros(macros),
+            preProcess: OhmInlineMath.convert,
+            ignoredClasses: ["katex"],
+        });
+    } else {
+        renderMathInElement(document.body, {
+            delimiters: [displayDelimiters[0], inlineDelimiters[0], displayDelimiters[1], inlineDelimiters[1]],
+            throwOnError: false, macros,
+        });
+    }
 
 });

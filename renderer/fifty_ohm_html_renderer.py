@@ -6,6 +6,7 @@ from mistletoe import Document, HtmlRenderer
 from .comment import BlockComment
 from .dash import Dash
 from .formula import Formula
+from .formula_layout import classify, display_html
 from .halfwidth_spaces import HalfwidthSpaces
 from .include import Include
 from .index import Index
@@ -45,6 +46,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         section=None,
         section_url=None,
         navigation=None,
+        formula_layout=True,
         **kwargs,
     ):
         super().__init__(
@@ -81,6 +83,8 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         self.photo_handler = photo_handler
         self.include_handler = include_handler
         self.ui_labels = ui_labels or {}
+        self.formula_layout = formula_layout
+        self.formula_language = self.ui_labels.get("html_lang", "de")
 
         # Figure numbering context
         self.edition = edition
@@ -370,7 +374,22 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
     def render_include(self, token):
         return self.include_handler(token.ident)
 
+    def render_paragraph(self, token):
+        inner = self.render_inner(token)
+        if self.formula_layout:
+            classification = classify(inner, self.formula_language)
+            if classification["layout"] == "block":
+                return display_html(inner, classification)
+        return f"<p>{inner}</p>"
+
     def render_formula(self, token):
+        if self.formula_layout:
+            text = "$" + token.formula + "$"
+            classification = classify(text, self.formula_language)
+            if classification["layout"] == "block":
+                return display_html(text, classification)
+        # Rendering is not source validation: preserve malformed historical
+        # expressions as before rather than aborting the whole site build.
         return f"\n$${token.formula}$$\n"
 
     @staticmethod
