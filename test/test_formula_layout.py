@@ -114,7 +114,9 @@ def test_real_generator_template_integrates_contextual_assets(tmp_path, language
     builder.build_assets()
     assert f'<html lang="{language}" data-formula-presentation="contextual">' in page
     assert 'data-formula-rule="connected_formula_group"' in page
-    for asset in ('style-course.css', 'formula-inline.js', 'latex.js'):
-        assert f'assets/{asset}?v=formula-layout-1' in page
+    for asset, version in (('style-course.css', 'formula-layout-2'),
+                           ('formula-inline.js', 'formula-layout-1'),
+                           ('latex.js', 'formula-layout-1')):
+        assert f'assets/{asset}?v={version}' in page
         assert (config.p_build_assets/asset).is_file()
     assert page.index('assets/formula-inline.js') < page.index('assets/latex.js')

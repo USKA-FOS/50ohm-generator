@@ -262,7 +262,8 @@ span.formula {
   .course .question,
   .course .solution,
   .course .table,
-  .course .katex-display,
+  .course > .katex-display,
+  .course > .formula-block,
   .course .navigation {
     width: 59.3%;
   }
@@ -505,7 +506,9 @@ html[data-formula-presentation="contextual"] .course .katex-display > .katex {
   min-width: 100%;
   margin: .5em 0;
 }
-.course .formula-block .katex-display { margin: 0; }
+/* The outer block owns the text-column width. Do not apply the desktop
+   59.3% column rule again to KaTeX inside it. */
+.course .formula-block .katex-display { width: auto; margin: 0; }
 .course .formula-block .katex-display .base { margin: 0; }
 
 /* Quiz-Modus */
