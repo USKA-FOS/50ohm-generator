@@ -157,3 +157,12 @@ The browser moves complete answer elements, preserving correctness handlers
 and image answers. A random shuffle may occasionally keep the original order.
 This is independent of `--seed`, which controls build-time slide shuffling.
 The Swiss content wrapper exposes this setting as `--shuffle-answers`.
+
+## Formula presentation
+
+Normal HTML pages distinguish inline expressions from standalone equations,
+including punctuated formulas and configured connector groups. Inline math uses
+a native sans presentation; display math keeps serif fonts and its full line.
+The deterministic inventory, before/after preview, limitations and commands are
+in [FORMULA_PRESENTATION.md](doc/FORMULA_PRESENTATION.md). This does not rewrite
+canonical formulas or change PDF generation.
