@@ -7,7 +7,7 @@ function shuffleChildren(el) {
 document.addEventListener("DOMContentLoaded", function() {
   var els = document.querySelectorAll(".answers");
   for (var i = 0; i < els.length; i++) {
-//    shuffleChildren(els[i]);
+    if (window.OHM_SHUFFLE_ANSWERS === true) shuffleChildren(els[i]);
   }
   initQuizMode();
 });

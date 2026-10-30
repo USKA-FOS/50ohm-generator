@@ -713,6 +713,15 @@ class Build:
             self.config.p_assets, self.config.p_build_assets, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".git")
         )
 
+        # Configure only the generated asset; never rewrite the source script.
+        script_path = self.config.p_build_assets / "script.js"
+        script = script_path.read_text(encoding="utf-8")
+        enabled = "true" if self.config.shuffle_answers else "false"
+        script_path.write_text(
+            f"window.OHM_SHUFFLE_ANSWERS = {enabled};\n" + script,
+            encoding="utf-8",
+        )
+
     def __parse_snippets(self):
         snippets = {}
 

@@ -146,3 +146,14 @@ $ python3 -m http.server 8000
 ```
 
 Anschließend kann die Webseite unter [`http://localhost:8000/index.html`](http://localhost:8000/index.html) aufgerufen werden.
+
+## Browser answer shuffling
+
+`shuffle_answers` in `config/config.json` (or `OHM_SHUFFLE_ANSWERS=true`
+when the JSON key is absent) enables answer shuffling on every page load.
+The default is `false` for review sites. `build_assets()` writes the setting
+into the generated `assets/script.js`; the source asset is never rewritten.
+The browser moves complete answer elements, preserving correctness handlers
+and image answers. A random shuffle may occasionally keep the original order.
+This is independent of `--seed`, which controls build-time slide shuffling.
+The Swiss content wrapper exposes this setting as `--shuffle-answers`.

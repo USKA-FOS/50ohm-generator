@@ -25,6 +25,7 @@ def test_release_configuration_defaults_to_inactive(tmp_path: Path, monkeypatch:
     assert config.feedback_url is None
     assert config.generator_status is True
     assert config.review_workflow is False
+    assert config.shuffle_answers is False
 
 
 def test_release_configuration_rejects_invalid_boolean() -> None:
@@ -65,3 +66,23 @@ def test_review_controls_are_explicitly_enabled(enabled: bool) -> None:
     assert ("/review_workflow/api/widget/" in section) is enabled
     assert ('id="github-edit-button"' in section) is enabled
     assert ('href="diff.html?file=section.md"' in section) is enabled
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_browser_answer_shuffle_asset(tmp_path, enabled):
+    from types import SimpleNamespace
+    from src.build import Build
+
+    assets = tmp_path / "source-assets"
+    assets.mkdir()
+    source = (GENERATOR_ROOT / "assets/script.js").read_text(encoding="utf-8")
+    (assets / "script.js").write_text(source, encoding="utf-8")
+    builder = Build.__new__(Build)
+    builder.config = SimpleNamespace(
+        p_assets=assets, p_build=tmp_path / "output",
+        p_build_assets=tmp_path / "output/assets", shuffle_answers=enabled,
+    )
+    builder.build_assets()
+    output = (builder.config.p_build_assets / "script.js").read_text(encoding="utf-8")
+    assert output == f"window.OHM_SHUFFLE_ANSWERS = {str(enabled).lower()};\n" + source
+    assert (assets / "script.js").read_text(encoding="utf-8") == source
