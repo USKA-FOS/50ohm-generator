@@ -14,6 +14,10 @@
 
 Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
+## Rendering corrections
+
+- [German TeX quotation rendering: AF305 fix and porting notes](doc/TEX_QUOTATION_RENDERING_FIX.md)
+
 ## Release-Konfiguration
 
 Die regulare Kopfzeile zeigt DE/FR/IT rechts und den optionalen BETA-Hinweis

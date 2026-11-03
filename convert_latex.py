@@ -5,7 +5,7 @@ _PATTERN = re.compile(
     r'|(?P<comma>\{,\})'                                                            # {,}
     r'|(?P<tilde>~)'                                                                # ~
     r'|\\underline\{(?P<ul_body>(?:[^{}]|\{[^{}]*\})*)\}'                         # \underline{...}
-    r'|\\glqq (?P<glqq_body>.*?)\\grqq(?:\{\}| )'                                 # \glqq...\grqq
+    r'|\\glqq(?![A-Za-z])(?:\{\})?[ \t]*(?P<glqq_body>.*?)\\grqq(?![A-Za-z])(?:\{\}|[ \t]*)'                                 # \glqq...\grqq
     r'|(?P<num>\\num\{[^}]*\})'                                                    # \num{...}
     r'|\\qty(?:\[.*?\])?\{(?P<qty_val>[^}]*)\}\{(?P<qty_unit>[^}]*)\}'            # \qty[opt]{val}{unit}
     r'|\\qtyrange(?:\[.*?\])?\{(?P<qr_v1>[^}]*)\}\{(?P<qr_v2>[^}]*)\}\{(?P<qr_unit>[^}]*)\}'  # \qtyrange[opt]{}{}{unit}
@@ -22,7 +22,7 @@ def _replace(m: re.Match) -> str:
     if m.group('ul_body') is not None:
         return f'<u>{_PATTERN.sub(_replace, m.group("ul_body"))}</u>'
     if m.group('glqq_body') is not None:
-        return f'«{m.group("glqq_body")}»'
+        return f'„{m.group("glqq_body")}“'
     if m.group('num') is not None:
         return f'${m.group(0)}$'
     if m.group('qty_val') is not None:
