@@ -1,88 +1,87 @@
-# German TeX quotation rendering — AF305 regression
+# German TeX quotation rendering — AF305 and porting notes
 
-## Problem and cause
+## Required source convention and result
 
-AF305 contains valid TeX in the German canonical question:
+The agreed question-source forms are:
 
 ```latex
-Dieses Blockschaltbild zeigt einen SSB-Sender. Was ist die mit \glqq?\grqq{} bezeichnete Stufe?
+\glqq Text\grqq{}
+\glqq{}Text\grqq{}
 ```
 
-The generated course and slide HTML displayed the commands literally.
-`convert_latex.py` recognised the entire quotation pair only if `\glqq`
-was followed by a literal space. A question mark already delimits a TeX
-control word, so that requirement was incorrect. Because conversion matches
-both commands together, failure at the opening command also left the closing
-command unchanged. Neither source command is invalid.
+Both produce **„Text“**. The first space delimits the opening command and is
+not displayed; the empty group is the alternative explicit delimiter.
+`\glqqText` is a different control word and must not be interpreted as `\glqq`.
+For canonical consistency, the user requires an explicit opening delimiter
+also before punctuation: AF305 now uses `\glqq ?\grqq{}`.
+This is the chosen source convention, not a complete TeX syntax validator.
 
-There was a second defect: recognised pairs were converted into French/Swiss
-angle quotation marks. The German commands must produce **„…“**, as explicitly
-confirmed by the user. AF305 must read:
+Expected AF305 output:
 
 > Dieses Blockschaltbild zeigt einen SSB-Sender. Was ist die mit „?“ bezeichnete Stufe?
 
-The existing German Revision_3.0.8 PDF was checked with `pdftotext` and already
-contains the correct German quotation marks. No canonical or PDF correction
-is needed.
+The canonical separator correction and rebuilt catalogs are recorded in
+question-pool Revision_3.0.9, with an accepted manual-correction audit. It changes
+no meaning, answer, translation or review status. The existing Revision_3.0.8
+German PDF already rendered the quotes correctly; no PDF regeneration was
+requested for this source-convention change.
 
-## Correction
+## Generator defects and final correction
 
-- Accept punctuation directly after `\glqq`, as in `\glqq?\grqq{}`.
-- Accept an explicit empty delimiter group: `\glqq{}TEXT\grqq{}`.
-- Accept `\grqq` at the end of text or before punctuation without requiring
-  an empty group or a space.
-- Check control-word boundaries so commands such as `\glqqTEXT` or
-  `\grqqOther` are not misidentified.
-- Emit German low opening and high closing double quotation marks, U+201E
-  and U+201C, rather than U+00AB/U+00BB.
-- Preserve the existing protected math branch, quantity conversion, and
-  recursive conversion inside underlined text.
+The original question converter matched an entire pair only when `\glqq` was
+followed by a literal space. When the opening was not matched, the closing
+command also remained literal in HTML. It additionally emitted angle quotation
+marks `«…»`, which are wrong for these German commands.
 
-Spaces that delimit control words are consumed; spaces after an explicit
-`{}` group remain text. For example `\glqq TEXT\grqq weiter` produces
-`„TEXT“weiter`, whereas `\glqq TEXT\grqq{} weiter` preserves the word space.
-This follows the existing TeX convention rather than introducing extra spaces.
-The converter remains a lightweight preprocessor, not a complete TeX parser;
-this patch does not add nested or multiline quotation parsing.
+Commit `3cea91e` initially broadened recognition to include a bare punctuation
+character after the opening command and corrected the output characters.
+Following the user's clarification, **only the bare-opening acceptance is
+withdrawn**. German output is retained. The converter now:
 
-This is command-based conversion: `\glqq`/`\grqq` are German commands wherever
-used. This patch does not choose quotation styles from a page language or
-rewrite existing literal French/Italian quotation marks.
+- requires a space/tab separator or an explicit `{}` after `\glqq`;
+- accepts both agreed forms without displaying the command separator;
+- emits German U+201E/U+201C quotation marks **„…“**;
+- leaves bare `\glqq?`, longer command names and incomplete pairs unchanged;
+- preserves protected math, quantity conversion and recursion in underlining.
+
+The closing-command boundary check and support for a closing command before
+punctuation/end of text are retained. Spaces following a command delimiter are
+consumed; spaces after explicit `{}` remain ordinary text. The converter is
+not a complete TeX parser and does not add nested or multiline quotations.
+Existing literal French/Italian quotation marks are not rewritten. This is
+command-based conversion, not page-language typography selection.
 
 ## Files to port to main
 
-The standalone fix consists of:
+1. `convert_latex.py`: final quotation pattern and German replacement symbols.
+2. `test/test_convert_latex.py`: accepted separator forms, explicit rejection
+   of bare openings and longer commands, math/quantity/underlining regressions.
+3. This document and its optional README link.
 
-1. `convert_latex.py`: quotation pattern and replacement characters.
-2. `test/test_convert_latex.py`: regression cases for AF305, command delimiters,
-   unchanged incomplete/unknown commands and math, quantities and underlining.
-3. This note, optionally linked from the target README.
-
-It has no dependency on the recent formula font/layout changes. The shared
-question converter is called in `src/build.py` for current/upstream question
-and answer texts; its output feeds course and slide templates. When porting,
-check that the target branch still uses this conversion path. Apply the small
-quotation fix without replacing unrelated converter rules or importing the
-entire Swiss branch. No canonical import or PDF change is part of the patch.
-Regenerate the HTML sites after applying it; already published files are
-not altered by editing the generator. No client-side cache key change is
-required because conversion is performed at build time.
+This fix is independent of the formula font/layout changes. The shared
+converter is called in `src/build.py` for current/upstream question and answer
+texts, then used in course and slide templates. Check that conversion path
+on the target branch; port only the relevant quotation changes, not the entire
+Swiss branch. Do not cherry-pick `3cea91e` alone without the follow-up that
+withdraws bare-opening support. Also publish the corrected AF305 question source.
+No PDF-renderer change is involved. HTML sites must be rebuilt after applying
+the changes; no client-side cache key change is needed for server-side conversion.
 
 ## Verification — 3 November 2026
 
-20 targeted tests pass; one existing question-translation test is explicitly
-skipped because it requires special files. The real canonical AF305 text also
-converts to the exact sentence above. Tests cover both legacy space-delimited
-forms and punctuation/brace-delimited forms. No full site build or deployment
-was performed in this sequence.
+Regression tests cover AF305 with the required space, explicit `{}`, bare
+opening rejection, longer/incomplete commands, protected math, quantities and
+underlining. One pre-existing question-translation test requires special files
+and is marked skipped. Exact results and deployment revisions are recorded in
+the orchestrator's `TOOLS_AND_COMMANDS_SUMMARY.md`.
 
-From the orchestrator (writes test artifacts only under ignored `tmp/`):
+From the orchestrator (writes tests only under ignored `tmp/`):
 
 ```bash
-mkdir -p tmp/af305-quotes-20261103/pytest
+mkdir -p tmp/revision-3.0.9/pytest
 pushd 50ohm-generator >/dev/null
 UV_CACHE_DIR=../tmp/uv-cache-generator uv run --locked python -m pytest \
   test/test_convert_latex.py test/test_quote.py test/test_question.py test/test_unit.py \
-  --basetemp=../tmp/af305-quotes-20261103/pytest/run2 -q
+  --basetemp=../tmp/revision-3.0.9/pytest/run -q
 popd >/dev/null
 ```
