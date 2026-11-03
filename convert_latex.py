@@ -22,7 +22,7 @@ def _replace(m: re.Match) -> str:
     if m.group('ul_body') is not None:
         return f'<u>{_PATTERN.sub(_replace, m.group("ul_body"))}</u>'
     if m.group('glqq_body') is not None:
-        return f'„{m.group("glqq_body")}“'
+        return f'«{m.group("glqq_body")}»'
     if m.group('num') is not None:
         return f'${m.group(0)}$'
     if m.group('qty_val') is not None:

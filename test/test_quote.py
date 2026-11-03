@@ -9,11 +9,11 @@ from test.util import paragraph
 @pytest.mark.html
 def test_quote_html():
     assertions = {
-        '"quote"': "„quote“",
-        '" quote "': "„ quote “",
-        '"quote" "': '„quote“ "',
-        '"quo te1" filltext "qu ot e2"': "„quo te1“ filltext „qu ot e2“",
-        '"quo *te1*" filltext "qu ot e2"': "„quo <em>te1</em>“ filltext „qu ot e2“",
+        '"quote"': "«quote»",
+        '" quote "': "« quote »",
+        '"quote" "': '«quote» "',
+        '"quo te1" filltext "qu ot e2"': "«quo te1» filltext «qu ot e2»",
+        '"quo *te1*" filltext "qu ot e2"': "«quo <em>te1</em>» filltext «qu ot e2»",
         '""': '""',
     }
 

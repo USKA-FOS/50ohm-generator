@@ -16,7 +16,7 @@ Dieses Repository enthält den Generator für die Webseite, der mit einem andern
 
 ## Rendering corrections
 
-- [German TeX quotation rendering: AF305 fix and porting notes](doc/TEX_QUOTATION_RENDERING_FIX.md)
+- [Swiss quotation rendering: AF305 fix and porting notes](doc/TEX_QUOTATION_RENDERING_FIX.md)
 
 ## Release-Konfiguration
 
