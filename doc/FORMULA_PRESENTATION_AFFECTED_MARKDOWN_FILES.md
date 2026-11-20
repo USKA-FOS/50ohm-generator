@@ -1,22 +1,22 @@
-# Fichiers Markdown concernés par les corrections de présentation des formules
+# Markdown files affected by formula presentation fixes
 
-Document établi le 20 novembre 2026 à partir de l’inventaire du site allemand du **30 octobre 2026**. Il ne constitue pas un nouvel audit du contenu actuel.
+Prepared on 20 November 2026 from the German website inventory of **30 October 2026**. This document is not a fresh audit of the current content.
 
-## Périmètre et interprétation
+## Scope and interpretation
 
-La branche `fix/formula-presentation` du générateur regroupe les corrections de présentation : distinction entre expressions intégrées au texte et équations isolées, polices adaptées au contexte, tailles relatives, alignement et gestion de la largeur disponible.
+The generator branch `fix/formula-presentation` contains presentation fixes: distinguishing expressions within prose from standalone equations, choosing fonts appropriate to each context, relative sizing, alignment and management of the available width.
 
-- **34 fichiers** contiennent des paragraphes dont les formules doivent être reconnues comme des blocs isolés par le générateur.
-- **254 fichiers** contiennent des formules dans le contenu pédagogique et constituent le périmètre plus large auquel s’applique la politique de rendu. Les 34 premiers sont inclus dans ces 254 fichiers.
-- La présence dans la liste générale ne signifie pas que chaque formule du fichier était incorrecte.
-- Il s’agit de corrections du générateur et de ses styles ; cette liste ne prescrit pas de réécriture des sources Markdown.
-- Les pages répétées dans plusieurs éditions ont été regroupées par fichier source. Les questions intégrées aux pages sont exclues de cet inventaire des fichiers pédagogiques ; les diapositives conservent leur traitement distinct.
+- **34 files** contain paragraphs whose formulas should be recognised as standalone blocks by the generator.
+- **254 files** contain formulas in educational content and form the broader scope of the rendering policy. The 34 files above are included in these 254 files.
+- Inclusion in the broader list does not mean that every formula in a file was incorrect.
+- These are fixes to the generator and its styles; this list does not prescribe rewriting the Markdown sources.
+- Pages repeated across editions have been grouped by source file. Embedded questions are excluded from this inventory of educational Markdown files; slides retain their separate treatment.
 
-Les chemins ci-dessous sont relatifs à la racine du dépôt de contenus `50ohm-contents-ch`. Les noms allemands des fichiers sont conservés.
+The paths below are relative to the root of the `50ohm-contents-ch` content repository. German filenames are preserved.
 
-## 1. Reconnaissance des formules isolées — 34 fichiers
+## 1. Recognition of standalone formulas — 34 files
 
-Ces fichiers présentent au moins un paragraphe identifié par le détecteur comme pouvant passer du traitement inline à un bloc de formule. Les cas comprennent notamment une formule suivie de ponctuation ou plusieurs formules reliées par un connecteur autorisé. La formule elle-même est conservée.
+Each file contains at least one paragraph identified by the detector as eligible for promotion from inline treatment to a formula block. Examples include a formula followed by punctuation or several formulas joined by an allowed connector. The mathematical expression itself is preserved.
 
 ```text
 contents/sections/aequivalente_isotrope_strahlungsleistung_eirp_2.md
@@ -55,9 +55,9 @@ contents/sections/widerstandsfarbcode.md
 contents/sections/zehnerpotenzen.md
 ```
 
-## 2. Périmètre général de présentation des formules — 254 fichiers
+## 2. General formula presentation scope — 254 files
 
-Cette liste complète inclut la précédente. Elle identifie les fichiers dont les pages allemandes contiennent des formules dans le contenu pédagogique, qu’elles soient intégrées au texte ou isolées.
+This complete list includes the previous list. It identifies files whose German pages contain formulas in educational content, whether within prose or as standalone equations.
 
 ```text
 contents/sections/9600_port.md
@@ -316,15 +316,15 @@ contents/sections/zehnerpotenzen.md
 contents/sections/zeigerinstrumente_ablesen.md
 ```
 
-## 3. Traçabilité et limites
+## 3. Traceability and limitations
 
-- Branche du générateur : `fix/formula-presentation`.
-- Commit de la branche examiné : `fa6ca9fe105a0159b3f3c1137051722197f01f2a`.
-- Commits de référence : `9301006` (documentation), `3618738` (rendu contextuel), `fa6ca9f` (mise en page près des illustrations flottantes).
-- Analyse et stratégie détaillées : `doc/FORMULA_PRESENTATION.md` dans le dépôt du générateur.
-- Rapport de détection historique : `tmp/formula-presentation-20261030/report-v3.json` dans l’espace d’orchestration local.
-- SHA-256 du rapport : `e5512a79d21b96b21f6a0754f9f4b748c8bf0eec9335ba05b6663e0a48446f58`.
+- Generator branch: `fix/formula-presentation`.
+- Examined branch commit: `fa6ca9fe105a0159b3f3c1137051722197f01f2a`.
+- Reference commits: `9301006` (documentation), `3618738` (contextual rendering), `fa6ca9f` (layout beside floated figures).
+- Detailed analysis and strategy: `doc/FORMULA_PRESENTATION.md` in the generator repository.
+- Historical detection report: `tmp/formula-presentation-20261030/report-v3.json` in the local orchestration workspace.
+- Report SHA-256: `e5512a79d21b96b21f6a0754f9f4b748c8bf0eec9335ba05b6663e0a48446f58`.
 
-L’inventaire est fondé sur les pages HTML historiques, puis relié aux noms des sources Markdown. Il ne conclut pas à des erreurs de contenu mathématique, ne vérifie pas la signification des indices et ne couvre pas les PDF. Les corrections de police peuvent également concerner des réponses aux questions ; celles-ci ne sont pas des fichiers Markdown pédagogiques et ne figurent donc pas dans ces listes.
+The inventory is based on historical HTML pages mapped back to Markdown source filenames. It does not establish mathematical content errors, verify the meaning of subscripts or cover PDFs. Font fixes may also affect question answers; these are not educational Markdown files and therefore do not appear in these lists.
 
-Les chemins canoniques actuels ont été résolus séparément à partir des métadonnées des objets, à la révision `495ce8dcb75383176370fd3537e2881f02bd4ffd` du dépôt de contenus. Aucun contenu, code du générateur ou site publié n’a été modifié pour produire cet inventaire.
+Current canonical paths were resolved separately from object metadata at content repository revision `495ce8dcb75383176370fd3537e2881f02bd4ffd`. No content, generator code or published website was changed to produce this inventory.
