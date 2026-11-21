@@ -4,6 +4,9 @@ from .slide_break import SlideBreak
 
 
 class FiftyOhmHtmlSlideRenderer(FiftyOhmHtmlRenderer):
+    # Morse code stays visual-only on slides (see issue 50ohm-contents-ch#10).
+    morse_playable = False
+
     def __init__(self, **kwargs):
         super().__init__(
             SlideBreak,

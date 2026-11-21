@@ -142,9 +142,28 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
         self.margin_anchor_id += 1
         return f'<a id="margin_{self.margin_anchor_id}"></a>'
 
+    # Whether [morse:...] tokens get the markup needed by assets/morse-sounder.js
+    # to be played as sound. Disabled in the slide renderer.
+    morse_playable = True
+
     @staticmethod
-    def render_morse_helper(morse_code):
-        result = '<span class="morse">'
+    def encode_morse_helper(morse_code):
+        """Encodes the output of Morse.convert_to_morse_code() for the
+        data-morse attribute: characters separated by spaces, each character
+        a string of symbols (1 = dit, 2 = dah, 3 = word gap), e.g. "12 3 2111".
+        """
+        return " ".join("".join(str(symbol) for symbol in char) for char in morse_code)
+
+    @staticmethod
+    def render_morse_helper(morse_code, playable=False):
+        if playable:
+            encoded = FiftyOhmHtmlRenderer.encode_morse_helper(morse_code)
+            result = (
+                f'<span class="morse morse-playable" data-morse="{encoded}" '
+                'role="button" tabindex="0" title="Morsezeichen abspielen">'
+            )
+        else:
+            result = '<span class="morse">'
         for char in morse_code:
             result += '<span class="morse_char">\n'
             for symbol in char:
@@ -163,7 +182,7 @@ class FiftyOhmHtmlRenderer(HtmlRenderer):
 
     def render_morse(self, token):
         morse_code = Morse.convert_to_morse_code(token.content)
-        return self.render_morse_helper(morse_code)
+        return self.render_morse_helper(morse_code, playable=self.morse_playable)
 
     @staticmethod
     def render_tag_helper(type, content, margin_id, margin_anchor_id):
