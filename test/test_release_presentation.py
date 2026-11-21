@@ -56,8 +56,8 @@ def test_review_controls_are_explicitly_enabled(enabled: bool) -> None:
     common = {
         "edition": "HB", "name": "Course", "number": 1,
         "chapter": {"ident": "chapter", "title": "Chapter", "abstract": "", "sections": [], "video_url": None},
-        "section": {"ident": "section", "title": "Section", "content": "Content", "video_url": None},
-        "section_id": 1, "markdown": "section.md", "repo": "https://example.invalid/repo",
+        "section": {"class": "N", "ident": "section", "title": "Section", "content": "Content", "video_url": None},
+        "section_id": 1, "chapter_id": 1, "class_map": {"N": "HB3"}, "markdown": "section.md", "repo": "https://example.invalid/repo",
     }
     chapter = env.get_template("html/chapter.html").render(**common)
     section = env.get_template("html/section.html").render(**common)

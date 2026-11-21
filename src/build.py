@@ -429,7 +429,7 @@ class Build:
                 next_chapter_url=self.navigation.next_chapter_url(chapter),
                 previous_section_url=self.navigation.section_preceding_chapter_url(chapter),
                 next_section_url=self.navigation.section_first_of_chapter_url(chapter),
-                disabled_label=self.disabled_label
+                class_map=self.class_map
             )
 
             result = self.__build_page(result, course_wrapper=True)
@@ -488,12 +488,14 @@ class Build:
                     section=section,
                     section_id=section_id,
                     chapter=chapter,
+                    chapter_id=chapter_number,
                     previous_chapter_url=self.navigation.this_chapter_url(chapter),
                     next_chapter_url=self.navigation.next_chapter_url(chapter),
                     previous_section_url=self.navigation.previous_section_url(chapter, section),
                     next_section_url=self.navigation.next_section_url(chapter, section),
                     repo=self.config.get_config_value('repo_base_url'),
-                    markdown=self.navigation.this_section_markdown(section)
+                    markdown=self.navigation.this_section_markdown(section),
+                    class_map=self.class_map
                 )
 
                 result = self.__build_page(result, course_wrapper=True)
@@ -603,7 +605,7 @@ class Build:
             result = self.__build_page(result)
             file.write(result)
 
-    def build_unified_edition(self, toc_file: Path, edition: str, title: str, disabled_label: str):
+    def build_unified_edition(self, toc_file: Path, edition: str, title: str, class_map: dict):
         """The Swiss way of generating editions: In contrast to upstream, we use one unified table
         of contents and disable those sections that are not relevant to the current edition. This
         ensures consistent numbering of chapters, sections, images etc. For now, we keep upstream
@@ -612,7 +614,7 @@ class Build:
         :param toc_file: File name of JSON ToC, searched in self.config.p_data_toc
         :param edition: Which edition to build from the unified ToC ('NE', 'A', 'NEA')
         :param title: The tile of the edition.
-        :param disabled_label: A label for disabled sections that is inserted into the chapter overview.
+        :param class_map: A dict with labels for each class. Inserted into the chapter overview.
 
         Note that in contrast to upstream, we cannot pull the edition title from the ToC file
         anymore and must pass it to this method instead.
@@ -636,7 +638,8 @@ class Build:
             book = json.loads(file.read().replace('ß', 'ss'))
             # FIXME: Not ideal to store this here since it may change during the
             # lifetime of the Builder
-            self.disabled_label = disabled_label
+            self.class_map = class_map
+            self.disabled_label = {"A": "HB3", "NE": "HB9", "NEA": ""}[edition]
             self.__annotate_book(book, title, edition)
             edition_name = book["title"]
             self.navigation = Navigation(edition, book)

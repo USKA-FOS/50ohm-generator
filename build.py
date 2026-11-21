@@ -33,18 +33,14 @@ course_titles = {
     },
 }
 
-disabled_labels = {
-    "de": {"A": "HB3", "NE": "HB9", "NEA": ""},
-    "fr": {"A": "HB3", "NE": "HB9", "NEA": ""},
-    "it": {"A": "HB3", "NE": "HB9", "NEA": ""},
-}
+class_map = {'N': 'HB3', 'E': 'HB3', 'A': 'HB9' }
 
 # Build Everything:
 bd = build.Build(conf)
 bd.build_website()
-bd.build_unified_edition("HB.json", "A", course_titles[lang]["A"], disabled_labels[lang]["A"])
-bd.build_unified_edition("HB.json", "NE", course_titles[lang]["NE"], disabled_labels[lang]["NE"])
-bd.build_unified_edition("HB.json", "NEA", course_titles[lang]["NEA"], disabled_labels[lang]["NEA"])
+bd.build_unified_edition("HB.json", "A", course_titles[lang]["A"], class_map)
+bd.build_unified_edition("HB.json", "NE", course_titles[lang]["NE"], class_map)
+bd.build_unified_edition("HB.json", "NEA", course_titles[lang]["NEA"], class_map)
 bd.build_assets()
 bd.build_solutions()
 bd.build_question_index()
