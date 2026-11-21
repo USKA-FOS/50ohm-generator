@@ -14,6 +14,11 @@
 
 Dieses Repository enthält den Generator für die Webseite, der mit einem andern [Repository](https://github.com/USKA-FOS/50ohm-contents-ch) als Quelle für die Inhalte arbeitet. Dieses Repository ist ein Fork des Generators, der vom DARC e.V. [hier](https://github.com/DARC-e-V/50ohm) angeboten und entwickelt wird.
 
+## Merge preparation
+
+- [Generator changes: motivation and commits](doc/BRANCH_CHANGES_FOR_MAIN_MERGE.en.md)
+- [Added tools and tests: purpose, commits and execution](doc/BRANCH_TOOLS_AND_TESTS.en.md)
+
 ## Rendering corrections
 
 - [Swiss quotation rendering: AF305 fix and porting notes](doc/TEX_QUOTATION_RENDERING_FIX.md)
