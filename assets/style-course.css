@@ -233,6 +233,33 @@ span.morse_char:last-child {
   padding-right: 0;
 }
 
+/* Playable morse code (assets/morse-sounder.js) */
+span.morse-playable {
+  cursor: pointer;
+  border-radius: 0.5ex;
+  padding: 0.6ex 0.8ex;
+  margin: 0 -0.8ex;
+  transition: background-color 0.15s;
+}
+
+span.morse-playable:hover,
+span.morse-playable:focus-visible {
+  background-color: rgba(172, 45, 36, 0.12);
+  outline: none;
+}
+
+span.morse-playable:focus-visible {
+  box-shadow: 0 0 0 1px #ac2d24;
+}
+
+span.morse-playing {
+  background-color: rgba(172, 45, 36, 0.18);
+}
+
+span.morse_char.morse-active {
+  color: #ac2d24;
+}
+
 span.formula {
   display: block;
   text-align: center;
