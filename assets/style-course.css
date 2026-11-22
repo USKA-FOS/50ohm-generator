@@ -255,6 +255,12 @@ span.formula {
   color: #f22;
 }
 
+.course iframe.circuitjs-simulation {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
 @media (min-width: 800px) {
   .course p,
   .course ul,
@@ -265,6 +271,14 @@ span.formula {
   .course .katex-display,
   .course .navigation {
     width: 59.3%;
+  }
+
+  .course iframe.circuitjs-simulation {
+    width: 59.3%;
+  }
+
+  .course .margin iframe.circuitjs-simulation {
+    width: 100%;
   }
 
   .course .margin {
