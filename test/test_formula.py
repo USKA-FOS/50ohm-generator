@@ -5,7 +5,7 @@ from renderer.fifty_ohm_html_renderer import FiftyOhmHtmlRenderer
 
 
 @pytest.mark.html
-def test_formula_html_legacy():
+def test_formula_html():
     assertions = {
         r"$a \cdot b$": "\n" + r"$$a \cdot b$$" + "\n\n",
         r" $a \cdot b$ ": "\n" + r"$$a \cdot b$$" + "\n\n",
@@ -14,6 +14,6 @@ def test_formula_html_legacy():
         r"Lorem Ipsum" + "\n" + r"$a \cdot b$": "<p>Lorem Ipsum</p>\n\n" + r"$$a \cdot b$$" + "\n\n",
     }
 
-    with FiftyOhmHtmlRenderer(formula_layout=False) as renderer:
+    with FiftyOhmHtmlRenderer() as renderer:
         for assertion in assertions:
             assert renderer.render(Document(assertion)) == assertions[assertion]

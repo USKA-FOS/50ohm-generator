@@ -1,12 +1,12 @@
 # Generator changes: motivation and implementing commits
 
-Snapshot: **21 November 2026**.
+Snapshot: **23 November 2026**, after withdrawal of the formula experiment.
 
 | Item | Reference |
 | --- | --- |
 | Repository | `USKA-FOS/50ohm-generator` |
 | Branch | `design/object-centric-canonical` |
-| Examined commit | `69bec73413877bc5f3e931db102f2c0457d1614b` |
+| Pre-withdrawal checkpoint | `before-formula-withdrawal-2026-11-23` at `c9d2e9d4c0bbcbfdfe63dc3b5f49cc58943d052b` |
 | Comparison branch | `origin/main` |
 | Main commit | `b5d5ea6e0b4f1b54b22bf74f9faa54a4f7b51938` |
 
@@ -252,43 +252,6 @@ errors when those characters occur in the input.
 **Implementation.** `renderer/fifty_ohm_html_renderer.py` and
 `renderer/fifty_ohm_latex_renderer.py`.
 
-### Contextual presentation of inline and standalone formulas
-
-**Change.** Classify complete paragraphs as inline expressions, standalone
-formulas, punctuated formulas or groups joined by configured connectors.
-Use mathematical sans-serif presentation inline and serif presentation for
-standalone equations. Preserve variable shape distinctions, provide the intended
-line width and prevent automatic breaking at relation signs. Add nonbreaking
-spacing after answer prefixes A:/B:/C:/D:.
-
-**Motivation.** Comparable equations on `NE_spitze_effektiv_wert.html` had
-inconsistent layouts, while formulas within prose could introduce conspicuous
-font and size changes. Correct presentation without rewriting formula content.
-
-**Commit.** `3618738`.
-
-**Implementation.** `renderer/formula_layout.py`, `config/formula-layout.json`,
-HTML renderer, `assets/formula-inline.js`, `assets/latex.js`, page template
-and course stylesheet.
-
-**Integration requirement.** Retain the follow-up fix `fa6ca9f` below. Ambiguous
-constructions are preserved; classification does not infer a subscript's meaning.
-Slides retain their existing rendering profile.
-
-### Formula layout beside floated figures
-
-**Change.** Give formula blocks the text-column width and prevent CSS from
-reapplying that width to nested KaTeX elements. Center equations in their column
-and allow horizontal scrolling when necessary.
-
-**Motivation.** The first formula correction could create large blank areas
-beside floated illustrations and clip equations on complete course pages.
-
-**Commit.** `fa6ca9f`, completing `3618738`.
-
-**Implementation.** `assets/style-course.css`, stylesheet cache reference in
-`templates/html/page.html`.
-
 ### TeX quotation-command boundaries
 
 **Change.** Recognize `\glqq Text\grqq{}` and `\glqq{}Text\grqq{}` while
@@ -331,3 +294,17 @@ retains these specific integration decisions:
 
 The corresponding homepage-resource update is recorded in
 `50ohm-contents-ch` commit `f0d163bd2`.
+
+## 7. Formula experiment withdrawal
+
+On 23 November 2026 the user decided to remove the experimental formula
+presentation and its detector from this merge branch. The prototype remains
+available on `fix/formula-presentation` at `fa6ca9f`.
+
+The current formula parser, rendering integration and course stylesheet return
+to main's behavior. Language, release, quotation, unit and shuffling changes
+listed above are retained. A new asset cache key delivers the restored files.
+
+The next design must distinguish detection, approved source correction and
+rendering implementation. Further rendering work requires an agreed specification.
+See `doc/FORMULA_EXPERIMENT_WITHDRAWAL.en.md` for the recovery references.

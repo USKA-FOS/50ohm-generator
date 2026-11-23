@@ -44,7 +44,7 @@ def test_entrypoint_retains_localized_course_titles(monkeypatch, language):
 
 
 @pytest.mark.parametrize("language", ["de", "fr", "it"])
-def test_badges_numbering_and_formula_layout_in_all_editions(tmp_path, monkeypatch, language):
+def test_badges_numbering_in_all_editions(tmp_path, monkeypatch, language):
     source = tmp_path / language
     for rel in ["toc", "contents/questions", "contents/sections", "contents/slides"]:
         (source / rel).mkdir(parents=True, exist_ok=True)
@@ -74,7 +74,7 @@ def test_badges_numbering_and_formula_layout_in_all_editions(tmp_path, monkeypat
             if section.exists():
                 html = section.read_text()
                 assert f'>{index}.1 {level}<span class="badge {badge}"' in html
-                assert 'class="formula-block"' in html
+                assert '<p>$U = R I$.</p>' in html
         index_html = (conf.p_build / f"{edition}_course_index.html").read_text()
         if edition != "NEA":
             assert "(HB3)" in index_html if edition == "A" else "(HB9)" in index_html
